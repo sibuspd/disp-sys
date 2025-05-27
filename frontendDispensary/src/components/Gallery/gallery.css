@@ -1,0 +1,21 @@
+.gallery-home{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+
+}
+
+.gallery-home-image-block{
+    width: 300px;
+    height: 250px;
+    cursor: pointer;
+}
+
+.gallery-home-image{
+    width: 100%;
+    height: 100%;
+    border: 2px solid #255674;
+    border-radius: 20px;
+    box-shadow: 2px 2px 2px;
+}
