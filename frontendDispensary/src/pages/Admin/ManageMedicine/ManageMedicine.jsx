@@ -5,9 +5,16 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SearchBox from "../../../components/SearchBox/SearchBox";
 import EditIcon from "@mui/icons-material/Edit";
+import Modal from "../../../components/Modal/Modal"; 
+import MedicineModal from "./MedicineModal/MedicineModal";
 
 function ManageMedicine() {
   const [medicineSearch, setMedicineSearch] = useState("");
+  const [addModal, setAddModal] =   useState(false);
+
+  const onOffModal = () => {
+    setAddModal( prev => !prev);
+  }
 
   const onChangeValue = (value) => {
     setMedicineSearch(value);
@@ -26,7 +33,7 @@ function ManageMedicine() {
           value={medicineSearch}
           onChange={onChangeValue}
         />
-        <div className="add-manage-medicine">Add</div>
+        <div className="add-manage-medicine" onClick={onOffModal}>Add</div>
       </div>
 
       <div className="manageMedicine-card">
@@ -61,6 +68,8 @@ function ManageMedicine() {
           </div>
         </div>
       </div>
+      { addModal && <Modal header="Manage Medicine" handleClose={onOffModal} children={<MedicineModal/>}/>}
+      
     </div>
   );
 }

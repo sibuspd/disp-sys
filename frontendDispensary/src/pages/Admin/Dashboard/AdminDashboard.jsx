@@ -51,9 +51,9 @@ useEffect(() => {
         <Link to="/admin/manage-medicine" className="admin-dashboard-card">
           Manage Medicines
         </Link>
-        <div className="admin-dashboard-card">
+        <Link to="/admin/record" className="admin-dashboard-card">
           Records
-        </div>        
+        </Link>        
         <div className="admin-dashboard-card">
           Facilities
         </div>        
