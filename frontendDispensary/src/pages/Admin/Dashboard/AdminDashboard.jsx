@@ -57,12 +57,12 @@ useEffect(() => {
         <Link to={"/admin/facility"} className="admin-dashboard-card">
           Facilities
         </Link>        
-        <div className="admin-dashboard-card">
+        <Link to={"/admin/nearby-hospital"} className="admin-dashboard-card">
           Nearby Hospitals
-        </div>        
-        <div className="admin-dashboard-card">
+        </Link>        
+        <Link to={"/admin/gallery"} className="admin-dashboard-card">
           Gallery
-        </div>        
+        </Link>        
       </div>
       {manageStaffModal && <Modal header={"Manage Staff"} handleClose={openCloseModal} value={"staff"} children={<ManageStaff/>}/>}
       {eventModal && <Modal header={"Events"} handleClose={openCloseModal}  value={"event"}children={<ManageEvent/>}/>} // Passing prop for reference to callback openCloseModal

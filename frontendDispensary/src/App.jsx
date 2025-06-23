@@ -10,6 +10,8 @@ import RegisterStudent from './pages/Admin/RegisterStudent/RegisterStudent'
 import ManageMedicine from './pages/Admin/ManageMedicine/ManageMedicine'
 import Record from './pages/Admin/Records/Record'
 import Facility from './pages/Admin/Facility/Facility'
+import NearByHospital from './pages/Admin/NearByHospital/NearByHospital'
+import AdminGallery from './pages/Admin/Gallery/AdminGallery'
 
 function App() {
 
@@ -25,6 +27,8 @@ function App() {
         <Route path="/admin/manage-medicine" element={<ManageMedicine/>}/>
         <Route path="/admin/record" element={<Record/>}/>
         <Route path="/admin/facility" element={<Facility/>}/>
+        <Route path="/admin/nearby-hospital" element={<NearByHospital/>}/>
+        <Route path="/admin/gallery" element={<AdminGallery/>}/>
       </Routes>
       <Footer/>
     </div>
