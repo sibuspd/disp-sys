@@ -11,6 +11,14 @@ function RegisterStudent() {
   const [searchStudent, setSearchStudent] = useState("");
   const [reportModal, setReportModal] = useState(false);
 
+  const [studentDetail, setStudentDetail]  = useState(
+    {_id:"", email: "", name: "", roll: "", mobileNo: "", fatherName: "", fatherMobile: "", address: "", previous_health: "", age: "", bloodGroup: "" }
+  );
+
+  const handleOnchangeInputField = (event, key) => {
+    setStudentDetail({...studentDetail, [key]: event.target.value});
+  }
+
   const openCloseModal = () => {
     setReportModal(prev => !prev);
   }
@@ -36,34 +44,44 @@ function RegisterStudent() {
         <form action="" className="register-form" onSubmit={handleSubmit}>
           <div className="register-form-div">
             <div className="register-input-box">
-              <input type="text" className="input-box-register" placeholder="Student's Name"/>
+              <input type="text" className="input-box-register" placeholder="Student's Name"
+                value={studentDetail.name} onChange={(event) => {handleOnchangeInputField(event, "name");}}/>
             </div>            
             <div className="register-input-box">
-              <input type="email" className="input-box-register" placeholder="Enter Email Id"/>
+              <input type="email" className="input-box-register" placeholder="Enter Email Id"
+                value={studentDetail.email} onChange={(event) => {handleOnchangeInputField(event, "email");}}/>
             </div>            
             <div className="register-input-box">
-              <input type="text" className="input-box-register" placeholder="Roll No."/>
+              <input type="text" className="input-box-register" placeholder="Roll No."
+                value={studentDetail.roll} onChange={(event) => {handleOnchangeInputField(event, "roll");}}/>
             </div>            
             <div className="register-input-box">
-              <input type="email" className="input-box-register" placeholder="Mobile number"/>
+              <input type="text" className="input-box-register" placeholder="Mobile number"
+                value={studentDetail.mobileNo} onChange={(event) => {handleOnchangeInputField(event, "mobileNo");}}/>
             </div>            
             <div className="register-input-box">
-              <input type="email" className="input-box-register" placeholder="Guardian's name"/>
+              <input type="text" className="input-box-register" placeholder="Guardian's name"
+                value={studentDetail.fatherName} onChange={(event) => {handleOnchangeInputField(event, "fatherName");}}/>
             </div>            
             <div className="register-input-box">
-              <input type="email" className="input-box-register" placeholder="Guardian's mobile number"/>
+              <input type="text" className="input-box-register" placeholder="Guardian's mobile number"
+                value={studentDetail.fatherMobile} onChange={(event) => {handleOnchangeInputField(event, "fatherMobile");}}/>
             </div>            
             <div className="register-input-box">
-              <input type="email" className="input-box-register" placeholder="Address"/>
+              <input type="text" className="input-box-register" placeholder="Address"
+                value={studentDetail.address} onChange={(event) => {handleOnchangeInputField(event, "address");}}/>
             </div>            
             <div className="register-input-box">
-              <input type="email" className="input-box-register" placeholder="Previous health issue"/>
+              <input type="text" className="input-box-register" placeholder="Previous health issue"
+                value={studentDetail.previous_health} onChange={(event) => {handleOnchangeInputField(event, "previous_health");}}/>
             </div>            
             <div className="register-input-box">
-              <input type="email" className="input-box-register" placeholder="Age"/>
+              <input type="text" className="input-box-register" placeholder="Age"
+                value={studentDetail.age} onChange={(event) => {handleOnchangeInputField(event, "age");}}/>
             </div>            
             <div className="register-input-box">
-              <input type="email" className="input-box-register" placeholder="Blood Group"/>
+              <input type="text" className="input-box-register" placeholder="Blood Group"
+                value={studentDetail.bloodGroup} onChange={(event) => {handleOnchangeInputField(event, "bloodGroup");}}/>
             </div>
           </div>
           <button type="submit" className="form-btn reg-btn">Register</button>

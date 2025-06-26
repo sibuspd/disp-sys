@@ -12,6 +12,7 @@ import Record from './pages/Admin/Records/Record'
 import Facility from './pages/Admin/Facility/Facility'
 import NearByHospital from './pages/Admin/NearByHospital/NearByHospital'
 import AdminGallery from './pages/Admin/Gallery/AdminGallery'
+import StudentDashboard from './pages/Student/StudentDashboard'
 
 function App() {
 
@@ -29,6 +30,7 @@ function App() {
         <Route path="/admin/facility" element={<Facility/>}/>
         <Route path="/admin/nearby-hospital" element={<NearByHospital/>}/>
         <Route path="/admin/gallery" element={<AdminGallery/>}/>
+        <Route path="/student/:id" element={<StudentDashboard/>}/> // dynamic id
       </Routes>
       <Footer/>
     </div>

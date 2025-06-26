@@ -65,7 +65,7 @@ useEffect(() => {
         </Link>        
       </div>
       {manageStaffModal && <Modal header={"Manage Staff"} handleClose={openCloseModal} value={"staff"} children={<ManageStaff/>}/>}
-      {eventModal && <Modal header={"Events"} handleClose={openCloseModal}  value={"event"}children={<ManageEvent/>}/>} // Passing prop for reference to callback openCloseModal
+      {eventModal && <Modal header={"Events"} handleClose={openCloseModal}  value={"event"}children={<ManageEvent/>}/>}
     </div>
   )
 }

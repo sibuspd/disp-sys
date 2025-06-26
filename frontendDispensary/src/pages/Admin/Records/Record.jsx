@@ -4,6 +4,8 @@ import {Link} from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import SearchBox from "../../../components/SearchBox/SearchBox";
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import Modal from "../../../components/Modal/Modal";
+import RecordModal from "./RecordModal/RecordModal";
 
 function Record() {
 
@@ -12,9 +14,14 @@ function Record() {
     const [listOfMonth, setListOfMonth] = useState([]);
 
     const currentYear = new Date().getFullYear();
+    const [modal, setModal] = useState(false);
 
     const [selectedMonth, setSelectedMonth] = useState(""); // For highlighting current month
     const [selectedYear, setSelectedYear] = useState(""); // For highlighting current year
+
+    const onOffModal = () => {
+        setModal(prev => !prev);
+    }
 
     const onChangeField = (value)  => {
         setStudentRoll(value);
@@ -43,6 +50,10 @@ function Record() {
         setListOfMonth(pastAndCurrentMonths);
         setSelectedMonth(pastAndCurrentMonths[pastAndCurrentMonths.length -1]); // last element of the array
     }, []);
+
+    const handleOnOpenModal = () => {
+        setModal(prev => !prev);
+    }
 
   return (
     <div className="records">
@@ -87,7 +98,7 @@ function Record() {
           {/* Report Table Rows */}
           <div className="report-form-row-block">
             <div className="report-form-row">
-              <div className=""><RemoveRedEyeIcon sx={{"cursor": "pointer"}}/></div>
+              <div className="" onClick={()=> handleOnOpenModal()}><RemoveRedEyeIcon sx={{"cursor": "pointer"}}/></div>
               <div className="col-2-mng">Sabyasachi Sahani</div>
               <div className="col-2-mng">102993058</div>
               <div className="col-3-mng">{new Date().toDateString()}</div>
@@ -99,6 +110,8 @@ function Record() {
           </div>
         </div>
       </div>
+      {modal && <Modal header="Records" handleClose={onOffModal} children={<RecordModal/>}/>}
+      
     </div>
   );
 }

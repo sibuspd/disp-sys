@@ -1,9 +1,11 @@
-import React from "react";
+import React,{useState} from "react";
 import "./manageEvent.css";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 function ManageEvent() {
+
+  const [title, setTitle] =useState("");
   return (
     <div className="add-staffs-box">
       {/* Input Form */}
@@ -14,6 +16,7 @@ function ManageEvent() {
               className="input-box-register mngEventInp"
               type="text"
               placeholder="Staff Name"
+              value={title} onChange={(event) => {setTitle(event.target.value);}}
             />
           </div>
         </div>
