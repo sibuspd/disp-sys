@@ -1,3 +1,13 @@
+# Specific sub-folder ignores
+backEnd/node_modules/
+backEnd/.env
+frontendDispensary/node_modules/
+frontendDispensary/.env
+
+# Build artifacts
+frontendDispensary/build/
+
+
 # Logs
 logs/
 *.log
