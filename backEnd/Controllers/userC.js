@@ -3,6 +3,11 @@
 const UserModels = require("../Models/user"); // Importing user model
 const bcryptjs = require("bcryptjs"); // Importing bcryptjs for password hashing
 const jwt = require("jsonwebtoken"); // Importing jsonwebtoken for token generation
+const crypto = require("crypto"); // Importing crypto for generating OTPs
+const nodemailer = require("nodemailer"); // Importing nodemailer for sending emails
+const { text } = require("stream/consumers");
+const { info } = require("console");
+
 
 // Cookie Configuration
 const cookieConfig = {
@@ -10,6 +15,15 @@ const cookieConfig = {
   secure: false, // Set to true if using HTTPS - In production mode
   sameSite: 'Lax' // Cookie is sent only for same-site requests
 }
+
+// Nodemailer transporter configuration for Sender's Server
+const transporter = nodemailer.createTransport({
+  service: 'gmail', // Using Gmail as the email service
+  auth: {
+    user: process.env.EMAIL, // Sender's email address
+    password: process.env.EMAIL_PASSWORD
+  }
+}); 
 
 // Registration function for user
 exports.register = async (req, res) => {
@@ -61,4 +75,55 @@ exports.login = async (req, res) => {
             issue: error.message,
         });
     }
+}
+
+// OTP generation function
+exports.sendOtp = async (req, res) => {
+  try{
+    const {email} = req.body; // Extracting email from request body
+    const user = await UserModels.findOne({ email }); // Finding if user already exists
+    
+    if(!user){
+      return res.status(404).json({ error: "User not found in database" });
+    }
+    else{
+      const buffer = crypto.randomBytes(4); // Generating 4 random bytes
+      const token = buffer.readUInt32BE(0) % 900000 + 100000; // Converting bytes to a 6-digit OTP
+
+      user.resetPasswordToken = token; // Saving the OTP in user model
+      user.resetPasswordExpires = Date.now() + 3600000; // Setting expiry time as 1 hour from now
+
+      await user.save(); // Saving the updated user model
+
+      // Email Layout for sending OTP
+      const mailOptions = {
+        from: process.env.EMAIL, // Sender's email address
+        to: email, // Client's email address for password reset
+        subject: 'Password Reset OTP',
+        text: `Your OTP for password reset is ${token}. It is valid for 1 hour.`
+      }
+
+      // Handling the transporter promise object for sending email
+      transporter.sendMail(mailOptions, (error, info) => {
+        if(error){
+          return res.status(500).json({
+            error: "Error in Server",
+            issue: error.message,
+          });
+        }
+        else{
+          res.status(200).json({
+            message: "OTP sent successfully to your email",
+          });
+        }
+      });
+
+    }
+  }
+  catch(error){
+    res.status(500).json({
+      error: "Something went wrong while sending OTP",
+      issue: error.message,
+    });
+  }
 }
