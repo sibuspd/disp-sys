@@ -2,6 +2,14 @@
 
 const UserModels = require("../Models/user"); // Importing user model
 const bcryptjs = require("bcryptjs"); // Importing bcryptjs for password hashing
+const jwt = require("jsonwebtoken"); // Importing jsonwebtoken for token generation
+
+// Cookie Configuration
+const cookieConfig = {
+  httpOnly: true, // Cookie is not accessible via JavaScript
+  secure: false, // Set to true if using HTTPS - In production mode
+  sameSite: 'Lax' // Cookie is sent only for same-site requests
+}
 
 // Registration function for user
 exports.register = async (req, res) => {
@@ -38,7 +46,10 @@ exports.login = async (req, res) => {
         
         // Verifies both email and password
         if(isExist && await bcryptjs.compare(password, isExist.password)){
-            return res.json({ message: "User logged in successfully", success: "true", user: isExist });
+          const token = jwt.sign({ userId: isExist._id}, 'SECRET_KEY', ) // Generating JWT token
+          res.cookie('token', token, cookieConfig); // Saving the token in cookie
+
+            return res.status(200).json({ message: "User logged in successfully", success: "true", user: isExist, token: token }); // Sending response back to client with user data and token
         }
         else{
             return res.status(400).json({ error: "Invalid credentials" });
