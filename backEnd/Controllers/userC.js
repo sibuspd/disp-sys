@@ -127,3 +127,27 @@ exports.sendOtp = async (req, res) => {
     });
   }
 }
+
+// OTP verification function
+exports.verifyOtp = async (req, res) => {
+  try{
+    const { email, otp} = req.body; // Extracting email and OTP from request body
+    const user = await UserModels.findOne({
+      email,
+      resetPasswordToken: otp,
+      resetPasswordExpires: { $gt: Date.now()} // Checks if alloted time is greater than current time, if not then returns Null
+    });
+
+    if(!user){
+      return res.status(400).json({ error: "Invalid OTP or OTP expired" });
+    }
+    res.status(200).json({message: "OTP verified successfully"}); // If OTP is valid
+
+  }
+  catch(error){
+    res.status(500).json({
+      error: "Something went wrong from Server's end",
+      issue: error.message,
+    });
+  }
+}
