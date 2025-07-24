@@ -151,3 +151,32 @@ exports.verifyOtp = async (req, res) => {
     });
   }
 }
+
+// Password reset function
+exports.resetPassword = async (req, res) => {
+  try{
+    const { email, newPassword } = req.body; // Extracting email and new password from request body
+    const user = await UserModels.findOne({ email });
+
+    if(!user){
+      return res.status(404).json({ error: "Encountering user account related issue" });
+    }
+
+    // Encrypting the new password
+    let updatedPassword = await bcryptjs.hash(newPassword, 10); // Hashing the new password with 10 rounds
+    user.password = updatedPassword; // Updating the password in user model
+
+    //Removing the OTP related fields from Usermodel - token and expiry time
+    user.resetPasswordToken = undefined; // Clearing the OTP
+    user.resetPasswordExpires = undefined; // Clearing the expiry time
+
+    await user.save(); // Saving the updated user model
+    res.status(200).json({ message: "Password reset successfully" });
+  }
+  catch(error){
+    res.status(500).json({
+      error: "Something went wrong while resetting password",
+      issue: error.message,
+    });
+  }
+}
