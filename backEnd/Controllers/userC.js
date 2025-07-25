@@ -59,12 +59,6 @@ exports.login = async (req, res) => {
         const { email, password } = req.body; // Destructuring request body
         const isExist = await UserModels.findOne({ email }); // Returns user object if exists or else null
         
-        const isValidPassword = await bcryptjs.compare(password, isExist.password);
-        console.log('Plain text password:', password);
-        console.log('Hashed password:', isExist.password);
-        console.log('isValidPassword:', isValidPassword);
-
-
         // Verifies both email and password
         if(isExist && await bcryptjs.compare(password, isExist.password)){
           const token = jwt.sign({ userId: isExist._id}, 'SECRET_KEY', ) // Generating JWT token
@@ -208,9 +202,73 @@ exports.updateStudentById = async (req, res) => {
   }
 }
 
-//Additional Details 
-// sibuspd@gmail.com
-// friend
+// Student Details by Roll Number
+exports.getStudentByRollNo = async (req, res) => {
+  try{
+    const {roll} = req.params;
+    const student = await UserModels.findOne({roll});
+    
+    if(student){
+      return res.status(200).json({ message: "Student data fetched successfully", user: student }); // If student with given roll number exists, return their details
+    }
+    return res.status(404).json({ error: "Invalid Roll Number" });
+  }
+  catch(error){
+    res.status(500).json({
+      error: "Something went wrong",
+      issue: error.message,
+    });
+  }
+}
 
-// bikubhanja@rbs.in
-// besbeshelaje
+// Registering Student by Staff/Faculty
+exports.registerStudentByStaff = async (req, res) => {
+  try{
+    // Generating password for the new student
+    const buffer = crypto.randomBytes(4); // Generating 4 random bytes for password
+    let token = buffer.readInt32BE(0) % 900000 + 100000; // Converting bytes to a 6-digit OTP
+
+    let {_id, ...body}  = req.body; // Destructuring request body to exclude _id field
+    const isExist = await UserModels.findOne({email: body.email});
+
+    if(isExist){
+      return res.status(400).json({ error: "User already exists" });
+    }
+    //Password generation
+    token = token.toString(); // Converting OTP to string for password
+    const updatedPass = await bcrypt.hash(token, 10); // Hashing the generated password with 10 rounds
+
+    const user = new UserModels({...body, password: updatedPass }); // Creating a new user instance with hashed password
+    await user.save(); // Saving the user to the database
+    
+    // Sending the plain text password (token) to intended user via email
+      const mailOptions = {
+        from: process.env.EMAIL, // Sender's email address
+        to: email, // Client's email address for password reset
+        subject: 'Password for New Account on College Dispensary System',
+        text: `Your password for College Dispensary System is ${token} and is registered with your email ${body.email}. Please change it after logging in.`
+      }
+
+      // Handling the transporter promise object for sending email
+      transporter.sendMail(mailOptions, (error, info) => {
+        if(error){
+          return res.status(500).json({
+            error: "Error in Server",
+            issue: error.message,
+          });
+        }
+        else{
+          res.status(200).json({
+            message: "Password has been sent to student's email - " + body.email,
+          });
+        }
+      });
+    
+  }
+  catch(err){
+    res.status(500).json({
+      error: "Something went wrong",
+      issue: err.message,
+    });
+  }
+}
