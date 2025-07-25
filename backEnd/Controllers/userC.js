@@ -37,6 +37,7 @@ exports.register = async (req, res) => {
 
     // Hashing the password
     const hashedPassword = await bcryptjs.hash(password, 10); // Hashing password with 10 rounds
+    console.log('Hashed password:', hashedPassword);
 
     // For new User
     const user = new UserModels({ name, email, roll , password: hashedPassword }); // Creating a new user instance
@@ -58,6 +59,12 @@ exports.login = async (req, res) => {
         const { email, password } = req.body; // Destructuring request body
         const isExist = await UserModels.findOne({ email }); // Returns user object if exists or else null
         
+        const isValidPassword = await bcryptjs.compare(password, isExist.password);
+        console.log('Plain text password:', password);
+        console.log('Hashed password:', isExist.password);
+        console.log('isValidPassword:', isValidPassword);
+
+
         // Verifies both email and password
         if(isExist && await bcryptjs.compare(password, isExist.password)){
           const token = jwt.sign({ userId: isExist._id}, 'SECRET_KEY', ) // Generating JWT token
@@ -180,3 +187,30 @@ exports.resetPassword = async (req, res) => {
     });
   }
 }
+
+// Function to update student details by ID
+exports.updateStudentById = async (req, res) => {
+  try{
+    const {id} = req.params; // Extracting student ID from request parameters
+    // Updating student details in the database or adding new student if not exists
+    const tobeUpdatedStudent = await UserModels.findByIdAndUpdate(id, req.body, {new: true}); // Finding student by ID and updating their details fetched from request body
+
+    if(tobeUpdatedStudent){
+      return res.status(200).json({ message: "User details updated successfully", user: tobeUpdatedStudent });
+    }
+    return res.status(404).json({ error: "No such students exists" }); // If student with given ID does not exist
+  }
+  catch(error){
+    res.status(500).json({
+      error: "Something went wrong from Server's end",
+      issue: error.message,
+    });
+  }
+}
+
+//Additional Details 
+// sibuspd@gmail.com
+// friend
+
+// bikubhanja@rbs.in
+// besbeshelaje

@@ -1,3 +1,5 @@
+// MIDDLEWARES FOR AUTHENTICATION
+
 const jwt = require("jsonwebtoken"); // For decoding JWT tokens
 const UserModels = require("../Models/user");
 
