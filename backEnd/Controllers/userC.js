@@ -272,3 +272,48 @@ exports.registerStudentByStaff = async (req, res) => {
     });
   }
 }
+
+// Adding Staff by Admin
+exports.addStaffsByAdmin = async (req, res) => {
+  try{
+    const { name, email, password, designation, mobileNo} = req.body;
+    const searchStaff = await UserModels.findOne({ email });
+    
+    if(searchStaff){
+      return res.status(400).json({ error: "Staff with this email already exists" });
+    }
+    // Creating a new staff member
+    let updatedPass = await bcryptjs.hash(password, 10);
+    const user = await UserModels({name, email, password: updatedPass, designation, mobileNo, role: "staff"});
+    await user.save();
+
+    // Sending email to the new staff member with their credentials
+    const mailOptions = {
+      from: process.env.EMAIL,
+      to: email,
+      subject: "Your password for account on College Dispensary System",
+      text: `Your password for College Dispensary System is ${password} and is registered with email ${email}. Please change it after logging in.`
+    }
+
+    transporter.sendMail(mailOptions, (error, info)=>{
+      if(error){
+        return res.status(500).json({error: 'Server Error'});        
+      }
+      else{
+        res.status(200).json({ message: "Password has been sent to staff's email" }); // Sending response back to client
+      }
+    });
+    
+  }
+  catch(err){
+    res.status(500).json({
+      error: "Something went wrong",
+      issue: err.message,
+    });
+  }
+}
+
+// Display all staff members without restricted access
+exports.getAllStaffs = async (req, res) => {
+  
+}
