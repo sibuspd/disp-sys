@@ -315,5 +315,68 @@ exports.addStaffsByAdmin = async (req, res) => {
 
 // Display all staff members without restricted access
 exports.getAllStaffs = async (req, res) => {
+  try{
+    const staffs = await UserModels.find({role: 'staff'}).select('-password'); // Fetching all staff members excluding their passwords
+    return res.status(200).json({staffs: staffs}); // Sending the list of staff members back to client
+  }
+  catch(err){
+    console.log(err);
+    res.status(500).json({
+      error: "Something went wrong",
+      issue: err.message,
+    });
+  }
+}
+
+// Function to update staff details by ID through Admin only
+exports.updateStaffById = async (req, res) => {
+  try{
+    const {id} = req.params;
+    const {name, designation, mobileNo} = req.body; //Get the updated details from request body
+
+    const staff = await UserModels.findById(id);
+    //Updating staff details if staff exists
+    if(staff){
+      staff.name = name;
+      staff.designation = designation;
+      staff.mobileNo = mobileNo;
+
+      await staff.save(); // Saving the updated staff details to the database
+      return res.status(200).json({ message: "Staff details updated successfully", staff: staff });
+    }
+    else{
+      return res.status(404).json({ error: "Staff not found" }); // If staff with given ID does not exist
+    }
+  }
+  catch(err){
+    res.status(500).json({
+      error: "Something went wrong while updating staff details",
+      issue: err.message,
+    });
+
+  }
+}
+
+// Delete Staff by ID through Admin
+exports.deleteStaff = async (req, res) => {
+  try{
+    const {id} = req.params;
+    const deletedUser = await UserModels.findByIdAndDelete(id); // Deleting staff member by ID
+
+    if(deletedUser){
+      return res.status(200).json({ message: "Staff deleted successfully" });
+    }
+    return res.status(404).json({ error: "Staff not found" });
+  }
+  catch(err){
+    res.status(500).json({
+      error: "Unable to delete staff. Internal Server Error",
+      issue: err.message,
+    });
+  }
+}
+
+// Logout function for all users
+exports.logout = (req, res) => {
   
 }
