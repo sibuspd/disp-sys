@@ -377,6 +377,7 @@ exports.deleteStaff = async (req, res) => {
 }
 
 // Logout function for all users
-exports.logout = (req, res) => {
-  
+exports.logout = async (req, res) => {
+  res.clearCookie('token', cookieConfig)
+  .json({message: "User logged out successfully"}); // Clearing the 'token' named cookie
 }
