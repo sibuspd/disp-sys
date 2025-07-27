@@ -10,4 +10,6 @@ router.post('/add', Authentication.adminFacultyAuth, FacilityController.addFacil
 //PUT API Calls
 router.put('/update/:id', Authentication.adminFacultyAuth, FacilityController.updateFacility);
 
+//GET API Calls
+router.get('/get', FacilityController.getFacility); // All users can access this route to get all facilities
 module.exports = router;

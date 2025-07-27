@@ -36,3 +36,19 @@ exports.updateFacility = async (req, res) => {
             issue: error.message });
     }
 }
+
+// Get all Facilities
+exports.getFacility = async (req, res) => {
+    try{
+        const facility = await FacilityModel.find().populate("addedBy","name").sort({createdAt: -1}); // Fetching all facilities and populating the addedBy field with user details | only "name" is populated to reduce data transfer
+        // createdAt: -1 sorts the facilities in descending order based on creation time
+        res.status(200).json({ message: "Facilities fetched successfully", facilities: facility });
+    }
+    catch(err){
+        console.log(err);
+        res.status(500).json({
+            error: "Internal Server Error",
+            issue: err.message
+        });
+    }
+}
