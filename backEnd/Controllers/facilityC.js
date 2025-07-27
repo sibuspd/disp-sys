@@ -52,3 +52,28 @@ exports.getFacility = async (req, res) => {
         });
     }
 }
+
+// Delete Facility through Admin
+exports.deleteFacility = async (req, res) => {
+    try{
+        const {id} = req.params;
+        const facility = await FacilityModel.findByIdAndDelete(id);
+
+        if(facility){
+            return res.status(200).json({message: "Facility deleted successfully", facility: facility});
+        }
+
+        return res.status(404).json({
+            error: "Facility not found",
+            message: "No facility found with the provided ID"
+        });
+
+    }
+    catch(err){
+        console.log(err);
+        res.status(500).json({
+            error: "Internal Server Error",
+            issue: err.message
+        });
+    }
+}
