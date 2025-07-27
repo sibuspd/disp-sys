@@ -20,3 +20,19 @@ exports.addFacility = async (req, res) => {
             issue: error.message });
     }
 }
+
+// Update Facility
+exports.updateFacility = async (req, res) => {
+    try{
+        const {id} = req.params;
+        const facility = await FacilityModel.findByIdAndUpdate(id, {...req.body, addedBy: req.user._id}, {new: true});
+
+        return res.status(200).json({message: "Facility updated successfully", facility: facility});
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({ 
+            error: "Internal Server Error",
+            issue: error.message });
+    }
+}
