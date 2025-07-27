@@ -33,7 +33,7 @@ exports.adminFacultyAuth = async (req, res, next) => {
         const token = req.cookies.token;
         if(token){
             const decoded = jwt.verify(token, 'SECRET_KEY');
-            req.user = await UserModels.findById(decoded.userId).select("-password");
+            req.user = await UserModels.findById(decoded.userId).select("-password"); // Fetching user data excluding password
 
             if(req.user?.role === 'student'){
                 throw new Error("You don't have permission to access this page");
