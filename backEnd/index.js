@@ -17,6 +17,9 @@ app.use('/api/auth', userRoutes); // Mounting user routes under /api/auth
 const facilityRoutes = require('./Routes/facilityR'); // Importing facility routes
 app.use('/api/facility', facilityRoutes); // Mounting facility routes under /api/facility
 
+const medicineRoutes = require('./Routes/medicineR'); // Importing medicine routes
+app.use('/api/medicine', medicineRoutes); // Mounting medicine routes under /api/medicine
+
 // Starting the server----------------------------------------------------------------------
 app.listen(process.env.PORT, () => {
     console.log('Server is listening on port- ', process.env.PORT);
