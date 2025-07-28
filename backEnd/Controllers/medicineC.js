@@ -53,3 +53,20 @@ exports.updateMedicineById = async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 }
+
+// Function to search medicine by name
+exports.searchMedicine = async (req, res) => {
+    try{
+        const {name} = req.query; // Search query parameter
+        const medicine = await MedicineModels.find({ name: {$regex: '^'+name, $options:'i'} }).populate("addedBy", "name").sort({createdAt: -1}); // Case-insensitive search for medicines starting with the given name
+
+        return res.status(200).json({
+            message: 'Medicines retrieved successfully',
+            medicines: medicine
+        });
+    }
+    catch(err){
+        console.error(err);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}

@@ -8,6 +8,7 @@ router.post('/add', Authentication.adminFacultyAuth, MedicineController.addMedic
 
 //GET API Calls
 router.get('/get', Authentication.adminFacultyAuth, MedicineController.getMedicine);
+router.get('/search-by-name', MedicineController.searchMedicine); // Search by name endpoint
 
 // PUT API Calls
 router.put('/update/:id', Authentication.adminFacultyAuth, MedicineController.updateMedicineById);
