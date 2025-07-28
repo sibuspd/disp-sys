@@ -70,3 +70,23 @@ exports.searchMedicine = async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 }
+
+// Function to delete medicine by ID
+exports.deleteMedicineById = async (req, res) => {
+    try{
+        const { id } = req.params;
+        const medicine = await MedicineModels.findByIdAndDelete(id);
+        
+        if(medicine){
+            return res.status(200).json({
+                message: 'Medicine deleted successfully',
+                medicine: medicine
+            });
+        }
+        return res.status(404).json({ error: 'No such Medicine exists in the database' });
+    }
+    catch(err){
+        console.error(err);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}

@@ -13,4 +13,7 @@ router.get('/search-by-name', MedicineController.searchMedicine); // Search by n
 // PUT API Calls
 router.put('/update/:id', Authentication.adminFacultyAuth, MedicineController.updateMedicineById);
 
+// DELETE API Calls
+router.delete('/delete/:id', Authentication.adminFacultyAuth, MedicineController.deleteMedicineById); // Assuming deleteMedicineById is defined in the controller);
+
 module.exports = router;
