@@ -20,6 +20,9 @@ app.use('/api/facility', facilityRoutes); // Mounting facility routes under /api
 const medicineRoutes = require('./Routes/medicineR'); // Importing medicine routes
 app.use('/api/medicine', medicineRoutes); // Mounting medicine routes under /api/medicine
 
+const hospitalRoutes = require('./Routes/nearByHospitalR'); // Importing hospital routes
+app.use('/api/hospital', hospitalRoutes); // Mounting hospital routes under /api/hospital
+
 // Starting the server----------------------------------------------------------------------
 app.listen(process.env.PORT, () => {
     console.log('Server is listening on port- ', process.env.PORT);
