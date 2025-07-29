@@ -33,3 +33,35 @@ exports.addHistory = async (req, res) => {
         });
     }
 }
+
+// Get all records by Year/Month
+exports.getHistory = async (req, res) => {
+    try{
+        let {month, year} = req.query; // Extracting month and year from query parameters
+        
+        // Finding the corresponding month number of current month 
+        const monthIndex = new Date(`${month} 1, ${year}`).getMonth(); // Converting month name to month index (0-11)
+
+        // Calculating start and end date of the month
+        const startDate = new Date(year, monthIndex, 1);
+        const endDate = new Date(year, monthIndex +1, 1);
+
+        // Finding history by date i.e., records that are created greater than/after start date and less than/before end date    
+        const history = await HistoryModel.find({
+            createdAt: {$gte: startDate, $lt: endDate} // Filtered history by date range
+        }).populate("student").sort({createdAt: -1}); // Descending order of creation date
+
+        return res.status(200).json({
+            message: 'Records fetched successfully',
+            history
+        });
+
+    }
+    catch(err){
+        console.log(err);
+        res.status(500).json({
+            error: 'Internal Server Error',
+            issue: err.message
+        });
+    }
+}
