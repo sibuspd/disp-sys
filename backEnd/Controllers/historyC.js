@@ -35,7 +35,7 @@ exports.addHistory = async (req, res) => {
 }
 
 // Get all records by Year/Month
-exports.getHistory = async (req, res) => {
+exports.getHistoryByDate = async (req, res) => {
     try{
         let {month, year} = req.query; // Extracting month and year from query parameters
         
@@ -56,6 +56,33 @@ exports.getHistory = async (req, res) => {
             history
         });
 
+    }
+    catch(err){
+        console.log(err);
+        res.status(500).json({
+            error: 'Internal Server Error',
+            issue: err.message
+        });
+    }
+}
+
+
+// Get a particular student's history
+exports.getStudentHistory = async (req, res) => {
+    try{
+        const {roll} = req.query; // Getting roll number from query parameters
+        const history = await HistoryModel.find({roll}).populate("student").sort({createdAt: -1}); // Finding history by roll number
+
+     // In case of no previous history
+     if(history.length ==0){ // History object is empty
+        return res.status(404).json({
+            error: 'No medicine record found for this roll number'
+        })
+     }
+     res.status(200).json({
+        message: 'Records fetched successfully',
+        history
+     });
     }
     catch(err){
         console.log(err);
