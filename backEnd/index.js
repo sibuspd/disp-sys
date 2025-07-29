@@ -29,6 +29,9 @@ app.use('/api/notification', notificationRoutes); // Mounting notification route
 const galleryRoutes = require('./Routes/galleryR'); // Importing gallery routes
 app.use('/api/gallery', galleryRoutes); // Mounting gallery routes under /api/gallery
 
+const historyRoutes = require('./Routes/historyR'); // Importing history routes
+app.use('/api/history', historyRoutes); // Mounting history routes under /api/history
+
 // Starting the server----------------------------------------------------------------------
 app.listen(process.env.PORT, () => {
     console.log('Server is listening on port- ', process.env.PORT);
