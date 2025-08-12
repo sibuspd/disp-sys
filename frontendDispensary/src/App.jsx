@@ -13,6 +13,7 @@ import Facility from './pages/Admin/Facility/Facility'
 import NearByHospital from './pages/Admin/NearByHospital/NearByHospital'
 import AdminGallery from './pages/Admin/Gallery/AdminGallery'
 import StudentDashboard from './pages/Student/StudentDashboard'
+import GlobalLoader from './components/GlobalLoader/GlobalLoader'
 
 function App() {
 
@@ -33,6 +34,8 @@ function App() {
         <Route path="/student/:id" element={<StudentDashboard/>}/> // dynamic id
       </Routes>
       <Footer/>
+
+      <GlobalLoader />
     </div>
   ) 
 }

@@ -60,6 +60,9 @@ function TableComp(props) {
               )
             })
           }
+
+          {/* Conditional rendering if data is empty */}
+          {props.data.length === 0 && <StyledTableRow><StyledTableCell colSpan={props.header.length}>No data found</StyledTableCell></StyledTableRow>}
         </TableBody>
       </Table>
     </TableContainer>

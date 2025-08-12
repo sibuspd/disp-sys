@@ -1,38 +1,41 @@
 import React from "react";
 import "./facility.css";
-
+import { useState, useEffect } from "react";
+import axios from "axios";
 function Facility() {
+  const [data, setData] = useState([]);
+
+  const fetchData = async () => {
+    await axios
+      .get("http://localhost:4000/api/facility/get")
+      .then((response) => {
+        setData(response.data.facilities);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
   return (
     <div className="facility">
       <div className="facility-header">
-        list of facilities available at GM COllege Health Centre
+        list of facilities available at GM College Health Centre
       </div>
       <div className="facility-lists">
-        <div className="facility-list">
-          <div className="facility-list-header">Ambulance:</div>
-          <p className="facility-list-value">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis
-            omnis voluptatibus facilis veniam dolor, sint nihil voluptatem
-            dolorum culpa iure quos animi porro provident expedita obcaecati
-            dolore ex exercitationem. Qui.
-          </p>
-        </div>        <div className="facility-list">
-          <div className="facility-list-header">Ambulance:</div>
-          <p className="facility-list-value">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis
-            omnis voluptatibus facilis veniam dolor, sint nihil voluptatem
-            dolorum culpa iure quos animi porro provident expedita obcaecati
-            dolore ex exercitationem. Qui.
-          </p>
-        </div>        <div className="facility-list">
-          <div className="facility-list-header">Ambulance:</div>
-          <p className="facility-list-value">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis
-            omnis voluptatibus facilis veniam dolor, sint nihil voluptatem
-            dolorum culpa iure quos animi porro provident expedita obcaecati
-            dolore ex exercitationem. Qui.
-          </p>
-        </div>
+        {/* conditional rendering */}
+        {data.map((item, index) => {
+          return (
+            <div className="facility-list">
+              <div className="facility-list-header">{item.title}</div>
+              <p className="facility-list-value">
+                {item.description}
+              </p>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

@@ -2,23 +2,32 @@ import React, { useState, useEffect } from "react";
 import "./nearByHospitals.css";
 import TableComp from "../Table/TableComp";
 // import axios from 'axios'
-
+import axios from "axios";
 function NearByHospitals() {
   const hosptalheaders = ["Sn No.", "Name", "Address", "Contact"];
-  const [rowData, setRowData] = useState([
-    {
-      snNo: 1,
-      name: "City Hospital Modipada",
-      address: "Sambalpur, Odisha",
-      contact: "1234567890",
-    },
-    {
-      snNo: 2,
-      name: "VSSMCH Burla",
-      address: "Sambalpur, Odisha",
-      contact: "1234567890",
+  const [rowData, setRowData] = useState([]);
+
+     const getFormattedData = (data) => {
+     let newarr = data.map((item, ind) => {
+      return {srNo: ind+1, name: item.name, address: item.address, contact: item.contact }; // Return an object
+     });
+     setRowData(newarr);
+   }
+
+  useEffect( ()=> {
+
+    const fetchData = async() => {
+      await axios.get('http://localhost:4000/api/hospital/get')
+      .then( (response) => {
+        getFormattedData(response.data.hospitals);
+      })
+      .catch(err => {
+        console.log(err);
+      });
     }
-  ]);
+
+    fetchData();
+  } ,[]);
   return (
     <div>
       <TableComp header={hosptalheaders} data={rowData} />
