@@ -43,17 +43,14 @@ function Home(props) {
       case "About":
         return <AboutUs />;
       case "Staff":
-        return <Staff />;
+        return <Staff showLoader={props.showLoader} hideLoader={props.hideLoader}/>;
       case "Facilities":
-        return <Facility />;
+        return <Facility showLoader={props.showLoader} hideLoader={props.hideLoader} />;
       case "NearByHospitals":
-        return <NearByHospitals />;
+        return <NearByHospitals showLoader={props.showLoader} hideLoader={props.hideLoader} />;
       case "Gallery":
         return (
-          <Gallery
-            showLoader={props.showLoader}
-            hideLoader={props.hideLoader}
-          />
+          <Gallery showLoader={props.showLoader} hideLoader={props.hideLoader} />
         );
 
       default:

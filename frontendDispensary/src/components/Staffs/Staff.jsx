@@ -6,7 +6,9 @@ import axios from 'axios'
 // import axios from 'axios'
 
 
-function Staff() {
+function Staff(props) {
+
+  props.showLoader(); // Initially set Loading to true when the data is being fetched
 
    const staffHeader = ["Name", "Designation", "Email Id", "Contact No."]
    const [rowData, setRowData] = useState([]);
@@ -23,7 +25,10 @@ function Staff() {
     .then((response) => { 
       getFormattedData(response.data.staffs); // Takes an array of objects as an argument
     })
-    .catch((error) => { console.log(error) });
+    .catch((error) => { console.log(error) })
+    .finally( ()=> {
+      props.hideLoader(); // Set Loading to false after data is fetched
+    });
    }
 
    useEffect(()=> {

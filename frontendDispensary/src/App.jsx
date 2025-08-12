@@ -14,14 +14,25 @@ import NearByHospital from './pages/Admin/NearByHospital/NearByHospital'
 import AdminGallery from './pages/Admin/Gallery/AdminGallery'
 import StudentDashboard from './pages/Student/StudentDashboard'
 import GlobalLoader from './components/GlobalLoader/GlobalLoader'
+import { useState } from 'react'
 
 function App() {
+
+  const [loader, setLoader] = useState(false);
+
+  const showLoader = () => {
+    setLoader(true);
+  }
+
+  const hideLoader = () => {
+    setLoader(false);
+  }
 
   return (
     <div className='App'>
       <Header/>
       <Routes>
-        <Route path="/" element={<Home/>}/>
+        <Route path="/" element={<Home  showLoader={showLoader} hideLoader={hideLoader} />}/>
         <Route path="/login" element={<Login/>}/>
         <Route path="/stock" element={<Stock/>}/>
         <Route path="/admin/dashboard" element={<AdminDashboard/>}/>
@@ -35,7 +46,8 @@ function App() {
       </Routes>
       <Footer/>
 
-      <GlobalLoader />
+      {/* Conditional Rendering of Loader */}
+      {loader && <GlobalLoader/>}     
     </div>
   ) 
 }

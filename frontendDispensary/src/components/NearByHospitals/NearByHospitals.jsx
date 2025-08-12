@@ -3,7 +3,10 @@ import "./nearByHospitals.css";
 import TableComp from "../Table/TableComp";
 // import axios from 'axios'
 import axios from "axios";
-function NearByHospitals() {
+function NearByHospitals(props) {
+
+  props.showLoader();
+
   const hosptalheaders = ["Sn No.", "Name", "Address", "Contact"];
   const [rowData, setRowData] = useState([]);
 
@@ -23,6 +26,9 @@ function NearByHospitals() {
       })
       .catch(err => {
         console.log(err);
+      })
+      .finally( () => {
+        props.hideLoader();
       });
     }
 
