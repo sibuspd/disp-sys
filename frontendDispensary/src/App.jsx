@@ -44,10 +44,9 @@ function App() {
         <Route path="/admin/gallery" element={<AdminGallery showLoader={showLoader} hideLoader={hideLoader} />}/>
         <Route path="/student/:id" element={<StudentDashboard showLoader={showLoader} hideLoader={hideLoader} />}/> // dynamic id
       </Routes>
-      <Footer/>
-
-      {/* Conditional Rendering of Loader */}
-      {loader && <GlobalLoader/>}     
+        {/* Conditional Rendering of Loader */}
+      {loader && <GlobalLoader/>}  
+      <Footer/>   
     </div>
   ) 
 }
