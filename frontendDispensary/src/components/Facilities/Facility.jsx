@@ -33,7 +33,7 @@ function Facility(props) {
         {/* conditional rendering */}
         {data.map((item, index) => {
           return (
-            <div className="facility-list">
+            <div className="facility-list" key={index}>
               <div className="facility-list-header">{item.title}</div>
               <p className="facility-list-value">
                 {item.description}

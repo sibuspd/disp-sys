@@ -8,8 +8,6 @@ import axios from 'axios'
 
 function Staff(props) {
 
-  props.showLoader(); // Initially set Loading to true when the data is being fetched
-
    const staffHeader = ["Name", "Designation", "Email Id", "Contact No."]
    const [rowData, setRowData] = useState([]);
 
@@ -21,6 +19,9 @@ function Staff(props) {
    }
 
    const fetchData = async() => {
+
+    props.showLoader(); // Initially set Loading to true when the data is being fetched
+    
     await axios.get('http://localhost:4000/api/auth/get-staff') // axios.get() returns a promise
     .then((response) => { 
       getFormattedData(response.data.staffs); // Takes an array of objects as an argument
@@ -33,7 +34,7 @@ function Staff(props) {
 
    useEffect(()=> {
     fetchData(); // Call the async function inside useEffect for pre-rendering the data
-   }, [rowData]);
+   }, []);
 
   return (
     <div className='staff'>

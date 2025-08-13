@@ -5,8 +5,6 @@ import TableComp from "../Table/TableComp";
 import axios from "axios";
 function NearByHospitals(props) {
 
-  props.showLoader();
-
   const hosptalheaders = ["Sn No.", "Name", "Address", "Contact"];
   const [rowData, setRowData] = useState([]);
 
@@ -20,6 +18,9 @@ function NearByHospitals(props) {
   useEffect( ()=> {
 
     const fetchData = async() => {
+
+      props.showLoader();
+
       await axios.get('http://localhost:4000/api/hospital/get')
       .then( (response) => {
         getFormattedData(response.data.hospitals);

@@ -33,16 +33,16 @@ function App() {
       <Header/>
       <Routes>
         <Route path="/" element={<Home  showLoader={showLoader} hideLoader={hideLoader} />}/>
-        <Route path="/login" element={<Login/>}/>
-        <Route path="/stock" element={<Stock/>}/>
-        <Route path="/admin/dashboard" element={<AdminDashboard/>}/>
-        <Route path="/admin/register-student" element={<RegisterStudent/>}/>
-        <Route path="/admin/manage-medicine" element={<ManageMedicine/>}/>
-        <Route path="/admin/record" element={<Record/>}/>
-        <Route path="/admin/facility" element={<Facility/>}/>
-        <Route path="/admin/nearby-hospital" element={<NearByHospital/>}/>
-        <Route path="/admin/gallery" element={<AdminGallery/>}/>
-        <Route path="/student/:id" element={<StudentDashboard/>}/> // dynamic id
+        <Route path="/login" element={<Login showLoader={showLoader} hideLoader={hideLoader} />}/>
+        <Route path="/stock" element={<Stock showLoader={showLoader} hideLoader={hideLoader} />}/>
+        <Route path="/admin/dashboard" element={<AdminDashboard showLoader={showLoader} hideLoader={hideLoader} />}/>
+        <Route path="/admin/register-student" element={<RegisterStudent showLoader={showLoader} hideLoader={hideLoader} />}/>
+        <Route path="/admin/manage-medicine" element={<ManageMedicine showLoader={showLoader} hideLoader={hideLoader} />}/>
+        <Route path="/admin/record" element={<Record showLoader={showLoader} hideLoader={hideLoader} />}/>
+        <Route path="/admin/facility" element={<Facility showLoader={showLoader} hideLoader={hideLoader} />}/>
+        <Route path="/admin/nearby-hospital" element={<NearByHospital showLoader={showLoader} hideLoader={hideLoader} />}/>
+        <Route path="/admin/gallery" element={<AdminGallery showLoader={showLoader} hideLoader={hideLoader} />}/>
+        <Route path="/student/:id" element={<StudentDashboard showLoader={showLoader} hideLoader={hideLoader} />}/> // dynamic id
       </Routes>
       <Footer/>
 
