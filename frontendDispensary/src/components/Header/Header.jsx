@@ -2,12 +2,38 @@ import React, { useState, useEffect } from "react";
 import "./header.css";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-function Header() {
+import axios from "axios";
+import {toast, ToastContainer} from 'react-toastify';
+function Header(props) {
   const [eventpopup, setEventpopup] = useState(false);
   const [helpline, setHelpline] = useState(false);
 
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleLogin = () => {
+    navigate('/login');
+  }
   
+  const handleLogout = async() => {
+    props.showLoader();
+
+    await axios.post('http://localhost:4000/api/auth/logout',{},{withCredentials: true})
+    .then((response) => {
+      console.log(response);
+      props.handleLogin(false);
+
+      localStorage.clear();
+      navigate('/');
+    })
+    .catch(err => {
+      console.log(err);
+      toast.error(err?.response?.data?.error);
+    })
+    .finally(() =>{
+      props.hideLoader();
+    })
+  }
 
   const handleOpenPopup = (popup) => {
     if (popup === "event") {
@@ -95,15 +121,13 @@ function Header() {
         >
           Home
         </Link>
-        <Link
-          to={"/login"}
-          // onClick={props.isLogin ? handleLogout : handleLogin}
+        <div
+          to={"/login"} onClick={props.isLogin? handleLogout : handleLogin}
           className={`navbar-links ${
             location.pathname === "/login" ? "active-link" : null
           }`}
-        >Login
-          {/* {props.isLogin ? "Logout" : "Login"} */}
-        </Link>
+        >{props.isLogin ? "Logout" : "Login"}
+        </div>
         <Link
           to={"/stock"}
           className={`navbar-links ${
@@ -159,6 +183,8 @@ function Header() {
         />
       </div>
       }
+
+      <ToastContainer/>
     </div>
   );
 }

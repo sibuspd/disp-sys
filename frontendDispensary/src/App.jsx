@@ -18,7 +18,13 @@ import { useState } from 'react'
 
 function App() {
 
-  const [loader, setLoader] = useState(false);
+  const [loader, setLoader] = useState(false); // For loading screen toggle
+  const [isLogin, setIsLogin] = useState(localStorage.getItem('isLogin')); // Checking if user is logged in from local storage
+  // isLogin will be either true or false based on the value in local storage
+
+  const handleLogin = (value) => { // Value will be obtained from Login component
+    setIsLogin(value); 
+  }
 
   const showLoader = () => {
     setLoader(true);
@@ -30,10 +36,10 @@ function App() {
 
   return (
     <div className='App'>
-      <Header/>
+      <Header isLogin={isLogin} showLoader={showLoader} hideLoader={hideLoader} handleLogin={handleLogin} />
       <Routes>
         <Route path="/" element={<Home  showLoader={showLoader} hideLoader={hideLoader} />}/>
-        <Route path="/login" element={<Login showLoader={showLoader} hideLoader={hideLoader} />}/>
+        <Route path="/login" element={<Login showLoader={showLoader} hideLoader={hideLoader} handleLogin={handleLogin} />}/>
         <Route path="/stock" element={<Stock showLoader={showLoader} hideLoader={hideLoader} />}/>
         <Route path="/admin/dashboard" element={<AdminDashboard showLoader={showLoader} hideLoader={hideLoader} />}/>
         <Route path="/admin/register-student" element={<RegisterStudent showLoader={showLoader} hideLoader={hideLoader} />}/>
