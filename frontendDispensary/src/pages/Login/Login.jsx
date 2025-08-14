@@ -3,6 +3,7 @@ import "./login.css";
 import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import ForgotModal from "../../components/ForgotModal/ForgotModal";
 
 function Login(props) {
 
@@ -14,6 +15,12 @@ function Login(props) {
     email: "",
     password: "",
   });
+  const [forgotPassword, setForgotPassword] = useState(false);
+
+  // Toggle the Modal ON and OFF
+  const handleForgotModal = () =>{
+    setForgotPassword(prev=> !prev)
+  }
 
   const handleOnChange = (event, key, card) => {
     if (card === "login")
@@ -98,7 +105,7 @@ function Login(props) {
           <div className="form-btn" onClick={handleLogin}>Login</div>
         </div>
 
-        <div className="forgot-password-link">Forgot Password ?</div>
+        <div className="forgot-password-link" onClick={handleForgotModal}>Forgot Password ?</div>
       </div>
       {/* SignUp Form */}
       <div className="signup-page-card">
@@ -137,6 +144,9 @@ function Login(props) {
       </div>
 
       <ToastContainer />
+
+      {/* Conditional Rendering of Forgot Password Modal */}
+      {forgotPassword && <ForgotModal showLoader={props.showLoader} hideLoader={props.hideLoader} closeModal={handleForgotModal}/>}
     </div>
   );
 }
