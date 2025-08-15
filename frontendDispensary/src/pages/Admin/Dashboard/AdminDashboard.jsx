@@ -65,7 +65,7 @@ useEffect(() => {
         </Link>        
       </div>
       {manageStaffModal && <Modal header={"Manage Staff"} handleClose={openCloseModal} value={"staff"} children={<ManageStaff showLoader={props.showLoader} hideLoader={props.hideLoader}/>}/>}
-      {eventModal && <Modal header={"Events"} handleClose={openCloseModal}  value={"event"}children={<ManageEvent/>}/>}
+      {eventModal && <Modal header={"Events"} handleClose={openCloseModal}  value={"event"}children={<ManageEvent showLoader={props.showLoader} hideLoader={props.hideLoader}/>}/>}
     </div>
   )
 }

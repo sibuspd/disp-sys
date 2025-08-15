@@ -13,24 +13,30 @@ function ManageStaff(props) {
     designation: "",
     mobileNumber: "",
   });
+
+  const [staffs, setStaffs] = useState([]); // Will contain the list of staffs
+
   const handleOnChange = (event, key) => {
     setInputField({ ...inputField, [key]: event.target.value });
   };
 
-  const fetchData = async() => {
-        props.showLoader(); // Initially set Loading to true when the data is being fetched
-    
-    await axios.get('http://localhost:4000/api/auth/get-staff') // axios.get() returns a promise
-    .then((response) => { 
-      getFormattedData(response.data.staffs); // Takes an array of objects as an argument
-    })
-    .catch((error) => { console.log(error) })
-    .finally( ()=> {
-      props.hideLoader(); // Set Loading to false after data is fetched
-    });
-  }
+  const fetchData = async () => {
+    props.showLoader(); // Initially set Loading to true when the data is being fetched
 
-  useEffect( ()=>{
+    await axios
+      .get("http://localhost:4000/api/auth/get-staff") // axios.get() returns a promise
+      .then((response) => {
+        setStaffs(response.data.staffs);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        props.hideLoader(); // Set Loading to false after data is fetched
+      });
+  };
+
+  useEffect(() => {
     fetchData();
   }, []);
 
@@ -102,8 +108,11 @@ function ManageStaff(props) {
 
       {/* Staff details fetched from backend */}
       <div className="list-staffs">
-        <div className="list-staff">
-          <div>Sabyasachi</div>
+        {
+          staffs.map((item, index) => {
+            return (
+                     <div key={index} className="list-staff">
+          <div>{item.name}</div>
           <div className="list-staff-btns">
             <div style={{ cursor: "pointer" }}>
               <EditIcon />
@@ -113,39 +122,9 @@ function ManageStaff(props) {
             </div>
           </div>
         </div>
-        <div className="list-staff">
-          <div>Anurag</div>
-          <div className="list-staff-btns">
-            <div style={{ cursor: "pointer" }}>
-              <EditIcon />
-            </div>
-            <div style={{ cursor: "pointer" }}>
-              <DeleteIcon />
-            </div>
-          </div>
-        </div>
-        <div className="list-staff">
-          <div>ACP</div>
-          <div className="list-staff-btns">
-            <div style={{ cursor: "pointer" }}>
-              <EditIcon />
-            </div>
-            <div style={{ cursor: "pointer" }}>
-              <DeleteIcon />
-            </div>
-          </div>
-        </div>
-        <div className="list-staff">
-          <div>Conan Daya</div>
-          <div className="list-staff-btns">
-            <div style={{ cursor: "pointer" }}>
-              <EditIcon />
-            </div>
-            <div style={{ cursor: "pointer" }}>
-              <DeleteIcon />
-            </div>
-          </div>
-        </div>
+            )
+          })
+        }
       </div>
     </div>
   );
