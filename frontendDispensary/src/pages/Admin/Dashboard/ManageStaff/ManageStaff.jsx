@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./manageStaff.css";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Email } from "@mui/icons-material";
+import axios from "axios";
 
-function ManageStaff() {
+function ManageStaff(props) {
   const [inputField, setInputField] = useState({
     name: "",
     email: "",
@@ -15,6 +16,23 @@ function ManageStaff() {
   const handleOnChange = (event, key) => {
     setInputField({ ...inputField, [key]: event.target.value });
   };
+
+  const fetchData = async() => {
+        props.showLoader(); // Initially set Loading to true when the data is being fetched
+    
+    await axios.get('http://localhost:4000/api/auth/get-staff') // axios.get() returns a promise
+    .then((response) => { 
+      getFormattedData(response.data.staffs); // Takes an array of objects as an argument
+    })
+    .catch((error) => { console.log(error) })
+    .finally( ()=> {
+      props.hideLoader(); // Set Loading to false after data is fetched
+    });
+  }
+
+  useEffect( ()=>{
+    fetchData();
+  }, []);
 
   return (
     <div className="add-staffs-box">

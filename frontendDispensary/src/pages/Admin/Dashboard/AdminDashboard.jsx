@@ -7,7 +7,7 @@ import ManageStaff from './ManageStaff/ManageStaff'
 import ManageEvent from './ManageEvent/ManageEvent'
 import { Link } from 'react-router-dom'
 
-function AdminDashboard() {
+function AdminDashboard(props) {
 
   const [manageStaffModal, setManageStaffModal] = useState(false);
   const [eventModal, setEventModal] = useState(false);
@@ -64,7 +64,7 @@ useEffect(() => {
           Gallery
         </Link>        
       </div>
-      {manageStaffModal && <Modal header={"Manage Staff"} handleClose={openCloseModal} value={"staff"} children={<ManageStaff/>}/>}
+      {manageStaffModal && <Modal header={"Manage Staff"} handleClose={openCloseModal} value={"staff"} children={<ManageStaff showLoader={props.showLoader} hideLoader={props.hideLoader}/>}/>}
       {eventModal && <Modal header={"Events"} handleClose={openCloseModal}  value={"event"}children={<ManageEvent/>}/>}
     </div>
   )

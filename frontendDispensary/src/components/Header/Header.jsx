@@ -5,8 +5,9 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import axios from "axios";
 import {toast, ToastContainer} from 'react-toastify';
 function Header(props) {
-  const [eventpopup, setEventpopup] = useState(false);
+  const [eventpopup, setEventpopup] = useState(false); // Handles display of events under notification bar
   const [helpline, setHelpline] = useState(false);
+  const [events, setEvents] = useState([]); // For news and events notifications
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -51,6 +52,18 @@ function Header(props) {
     }
   };
 
+  const fetchEvents = async()=> {
+    await axios.get('http://localhost:4000/api/notification/get')
+    .then(response=>setEvents(response.data.notifications))
+    .catch(err => console.log(err));
+  }
+
+  useEffect(()=>{
+    if(eventpopup){
+      fetchEvents();
+    }
+  }, [eventpopup]); // Fetches events when event popup is opened for latest updates
+
   return (
     <div className="header">
       {/* Header College Details */}
@@ -62,12 +75,12 @@ function Header(props) {
             src="https://static.vecteezy.com/system/resources/previews/018/902/537/original/university-college-school-badge-logo-design-image-education-badge-logo-design-university-high-school-emblem-free-vector.jpg"
           />
           <div>
-            <div className="header-college-details-name">ଗଙ୍ଗାଧର ମେହେର</div>
+            <div className="header-college-details-name">ମାର୍ଶଲ</div>
             <div className="header-college-details-place">
               ସ୍ୱୟଂଶାସିତ ବିଦ୍ୟାଲୟ
             </div>
             <div className="header-college-details-name">
-              GM Autonomous College,{" "}
+              Marshal Autonomous College,{" "}
             </div>
             <div className="header-college-details-place">
               Sambalpur, Odisha
@@ -150,8 +163,13 @@ function Header(props) {
           </div>
           {eventpopup && (
             <div className="navbar-dropdown-popup event-pop">
-              <div className="popup-notification">Christmas Celebration</div>
-              <div className="popup-notification">Diwali Celebration</div>
+              {
+                events.map((item, index)=>{
+                  return (
+                    <div key={index} className="popup-notification">{item.title}</div>
+                  )
+                })
+              }
             </div>
           )}
         </div>
