@@ -29,7 +29,7 @@ function ManageStaff(props) {
       .get("http://localhost:4000/api/auth/get-staff") // axios.get() returns a promise
       .then((response) => {
         setStaffs(response.data.staffs);
-        console.log(response.data.staffs);
+        console.log(response.data.staffs);  
       })
       .catch((error) => {
         console.log(error);
@@ -102,6 +102,22 @@ function ManageStaff(props) {
     setInputField({ ...inputField, ...item });
   };
 
+  const filterOutData = (id) => {
+    let newArr = staffs.filter((item) => item?._id !== id); // Filter the data out that doesn't match the id
+    setStaffs(newArr);
+  }
+
+  const handleDelete = async(id) =>{
+    alert("Are you sure about deleting this entry?");
+    await axios.delete(`http://localhost:4000/api/auth/delete-staff/${id}`, {withCredentials: true})
+    .then((response)=>{
+       filterOutData(id);
+       toast.success(response.data.message);
+    })
+    .catch(err=>{
+      toast.error(err?.response?.data?.error);
+    })
+  }
   return (
     <div className="add-staffs-box">
       {/* Input Form */}
@@ -127,6 +143,7 @@ function ManageStaff(props) {
               onChange={(event) => {
                 handleOnChange(event, "email");
               }}
+              disabled={clickedStaff}
             />
           </div>
           { !clickedStaff && 
@@ -188,7 +205,8 @@ function ManageStaff(props) {
                 >
                   <EditIcon />
                 </div>
-                <div style={{ cursor: "pointer" }}>
+                <div style={{ cursor: "pointer" }}
+                  onClick={() => handleDelete(item._id)}>
                   <DeleteIcon />
                 </div>
               </div>
