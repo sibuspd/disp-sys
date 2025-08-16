@@ -6,15 +6,16 @@ import { Email } from "@mui/icons-material";
 import axios from "axios";
 import {toast,ToastContainer} from 'react-toastify';
 function ManageStaff(props) {
-  const [inputField, setInputField] = useState({
+  const [inputField, setInputField] = useState({ // The user details in the form
     name: "",
     email: "",
     password: "",
     designation: "",
-    mobileNumber: "",
+    mobileNo: "",
   });
 
   const [staffs, setStaffs] = useState([]); // Will contain the list of staffs
+  const [clickedStaff, setClickedStaff] = useState(null); // The staff object that has been clicked
 
   const handleOnChange = (event, key) => {
     setInputField({ ...inputField, [key]: event.target.value });
@@ -27,6 +28,7 @@ function ManageStaff(props) {
       .get("http://localhost:4000/api/auth/get-staff") // axios.get() returns a promise
       .then((response) => {
         setStaffs(response.data.staffs);
+        console.log(response.data.staffs);
       })
       .catch((error) => {
         console.log(error);
@@ -43,7 +45,7 @@ function ManageStaff(props) {
   const handleAddStaff = async(e) => {
     e.preventDefault(); // Prevents the form from refreshing the page to empty
     // Validation
-    if(inputField.name.trim().length === 0 || inputField.email.trim().length === 0 || inputField.password.trim().length === 0 || inputField.designation.trim().length === 0 || inputField.mobileNumber.trim().length === 0)
+    if(inputField.name.trim().length === 0 || inputField.email.trim().length === 0 || inputField.password.trim().length === 0 || inputField.designation.trim().length === 0 || inputField.mobileNo.trim().length === 0)
       {
         console.log("Validation failed");
         return toast.error("Please fill in all details");
@@ -52,8 +54,8 @@ function ManageStaff(props) {
     await axios.post('http://localhost:4000/api/auth/add-staff',inputField,{withCredentials: true})
     .then((response)=>{
       toast.success(response.data.message);
-      setStaffs([inputField, ...staffs]); // Append the new staff objectto the staffs array
-      setInputField({name: "", email: "", password: "", designation: "", mobileNumber: ""}); // To re-empty the input fields for further staff addition
+      setStaffs([inputField, ...staffs]); // Append the new staff object to the staffs array
+      setInputField({name: "", email: "", password: "", designation: "", mobileNo: ""}); // To re-empty the input fields for further staff addition
     })
     .catch(err => {
       toast.error(err?.response?.data?.error);
@@ -62,6 +64,11 @@ function ManageStaff(props) {
       props.hideLoader();
     });
 
+  }
+
+  const handleOnEditBtn = async(item) => {
+    setClickedStaff(item);
+    setInputField({...inputField,...item});
   }
 
   return (
@@ -118,7 +125,7 @@ function ManageStaff(props) {
               className="input-box-register"
               type="text"
               placeholder="Mobile number"
-              value={inputField.mobileNumber}
+              value={inputField.mobileNo}
               onChange={(event) => {
                 handleOnChange(event, "mobileNumber");
               }}
@@ -137,7 +144,7 @@ function ManageStaff(props) {
             <div key={index} className="list-staff">
               <div>{item.name}</div>
               <div className="list-staff-btns">
-                <div style={{ cursor: "pointer" }}>
+                <div style={{ cursor: "pointer" }} onClick={() =>handleOnEditBtn(item)}>
                   <EditIcon />
                 </div>
                 <div style={{ cursor: "pointer" }}>
