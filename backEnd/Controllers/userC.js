@@ -316,7 +316,7 @@ exports.addStaffsByAdmin = async (req, res) => {
 // Display all staff members without restricted access
 exports.getAllStaffs = async (req, res) => {
   try{
-    const staffs = await UserModels.find({role: 'staff'}).select('-password'); // Fetching all staff members excluding their passwords
+    const staffs = await UserModels.find({role: 'staff'}); // Fetching all staff members with all details including passwords
     return res.status(200).json({staffs: staffs}); // Sending the list of staff members back to client
   }
   catch(err){
