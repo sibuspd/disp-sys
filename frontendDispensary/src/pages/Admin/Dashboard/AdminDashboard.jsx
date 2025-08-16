@@ -21,14 +21,7 @@ function AdminDashboard(props) {
     }
   }
 
-  // the following useEffects have been used to log the real-time values after a state update.
-  useEffect(() => {
-  console.log("Event modal is", eventModal);
-}, [eventModal]);
-
-useEffect(() => {
-  console.log("Staff modal is", manageStaffModal);
-}, [manageStaffModal]);
+ let userInfo = localStorage.getItem("userInfo")? JSON.parse(localStorage.getItem("userInfo")):null; // Get the user info from local storage saved during login
 
   return (
     <div className="adminDashboard">
@@ -38,7 +31,7 @@ useEffect(() => {
           Welcome to Admin Panel
         </div>
         <div className="welcome-admin-right-side">
-          <div className="manage-staff-btn" onClick={() => openCloseModal("staff")}>Manage Staff</div>
+          {userInfo?.role === 'admin' && <div className="manage-staff-btn" onClick={() => openCloseModal("staff")}>Manage Staff</div>}
           <div className="manage-staff-btn" onClick={() => openCloseModal("event")}>Events</div>
         </div>
       </div>
@@ -65,7 +58,7 @@ useEffect(() => {
         </Link>        
       </div>
       {manageStaffModal && <Modal header={"Manage Staff"} handleClose={openCloseModal} value={"staff"} children={<ManageStaff showLoader={props.showLoader} hideLoader={props.hideLoader}/>}/>}
-      {eventModal && <Modal header={"Events"} handleClose={openCloseModal}  value={"event"}children={<ManageEvent showLoader={props.showLoader} hideLoader={props.hideLoader}/>}/>}
+      {eventModal && <Modal header={"Events"} handleClose={openCloseModal}  value={"event"} children={<ManageEvent showLoader={props.showLoader} hideLoader={props.hideLoader}/>}/>}
     </div>
   )
 }
