@@ -166,7 +166,7 @@ function Header(props) {
               {
                 events.map((item, index)=>{
                   return (
-                    <div key={index} className="popup-notification">{item.title}</div>
+                    <div key={index} className="popup-notification">---{item.title}</div>
                   )
                 })
               }

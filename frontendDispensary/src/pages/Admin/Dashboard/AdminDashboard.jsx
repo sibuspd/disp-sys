@@ -1,6 +1,6 @@
 // This page is structured under user heirarchy - Admin
 
-import React, {useState, useEffect} from 'react'
+import React, {useState} from 'react'
 import './adminDashboard.css'
 import Modal from '../../../components/Modal/Modal'
 import ManageStaff from './ManageStaff/ManageStaff'
@@ -21,6 +21,7 @@ function AdminDashboard(props) {
     }
   }
 
+  
  let userInfo = localStorage.getItem("userInfo")? JSON.parse(localStorage.getItem("userInfo")):null; // Get the user info from local storage saved during login
 
   return (

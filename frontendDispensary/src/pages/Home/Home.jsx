@@ -16,6 +16,9 @@ function Home(props) {
   const [page, setPage] = useState("About");
   let [rightSideHeader, setRightSideHeader] = useState("About Us");
 
+  // Getting user info from local storage after login
+  let userInfo = localStorage.getItem("userInfo")? JSON.parse(localStorage.getItem("userInfo")):null;
+
   //Menu Options collection
   const handleChangeTab = (pagename) => {
     setPage(pagename);
@@ -62,12 +65,12 @@ function Home(props) {
     <div className="home">
       <div className="home-block">
         <div className="home-left-page">
-          {/* {userInfo && userInfo?.role !== "student" && (
+          {userInfo && userInfo?.role !== "student" && (
             <Link to={"/admin/dashboard"} className={`home-left-option`}>
               <HomeIcon /> Dashboard
             </Link>
           )}
-          {userInfo && userInfo?.role === "student" && (
+          {/* {userInfo && userInfo?.role === "student" && (
             <Link
               to={`/student/${userInfo?._id}`}
               className={`home-left-option`}
