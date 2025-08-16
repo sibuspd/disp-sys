@@ -4,9 +4,10 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Email } from "@mui/icons-material";
 import axios from "axios";
-import {toast,ToastContainer} from 'react-toastify';
+import { toast, ToastContainer } from "react-toastify";
 function ManageStaff(props) {
-  const [inputField, setInputField] = useState({ // The user details in the form
+  const [inputField, setInputField] = useState({
+    // The user details in the form
     name: "",
     email: "",
     password: "",
@@ -42,34 +43,64 @@ function ManageStaff(props) {
     fetchData();
   }, []);
 
-  const handleAddStaff = async(e) => {
-    e.preventDefault(); // Prevents the form from refreshing the page to empty
-    // Validation
-    if(inputField.name.trim().length === 0 || inputField.email.trim().length === 0 || inputField.password.trim().length === 0 || inputField.designation.trim().length === 0 || inputField.mobileNo.trim().length === 0)
-      {
-        console.log("Validation failed");
-        return toast.error("Please fill in all details");
-      } 
-    props.showLoader();
-    await axios.post('http://localhost:4000/api/auth/add-staff',inputField,{withCredentials: true})
+  const handleUpdate = async() =>{
+    await axios.put(`http://localhost:4000/api/auth/update-staff/${clickedStaff?._id}`, inputField, {withCredentials: true} )
     .then((response)=>{
-      toast.success(response.data.message);
-      setStaffs([inputField, ...staffs]); // Append the new staff object to the staffs array
-      setInputField({name: "", email: "", password: "", designation: "", mobileNo: ""}); // To re-empty the input fields for further staff addition
+      window.location.reload(); // Reload the page once the staff is updated
     })
-    .catch(err => {
+    .catch(err=> {
       toast.error(err?.response?.data?.error);
-    })
-    .finally(()=>{
-      props.hideLoader();
     });
+  } 
 
-  }
+  // The handleAddStaff(event) would perform both - Add and Update Staffs according to the value of clickedStaff
+  const handleAddStaff = async (e) => {
+    e.preventDefault(); // Prevents the form from refreshing the page to empty
 
-  const handleOnEditBtn = async(item) => {
+    if(clickedStaff){
+      handleUpdate();
+      return toast.success("Staff updated successfully");
+    }
+
+    // Validation
+    if (
+      inputField.name.trim().length === 0 ||
+      inputField.email.trim().length === 0 ||
+      inputField.password.trim().length === 0 ||
+      inputField.designation.trim().length === 0 ||
+      inputField.mobileNo.trim().length === 0
+    ) {
+      console.log("Validation failed");
+      return toast.error("Please fill in all details");
+    }
+    props.showLoader();
+    await axios
+      .post("http://localhost:4000/api/auth/add-staff", inputField, {
+        withCredentials: true,
+      })
+      .then((response) => {
+        toast.success(response.data.message);
+        setStaffs([inputField, ...staffs]); // Append the new staff object to the staffs array
+        setInputField({
+          name: "",
+          email: "",
+          password: "",
+          designation: "",
+          mobileNo: "",
+        }); // To re-empty the input fields for further staff addition
+      })
+      .catch((err) => {
+        toast.error(err?.response?.data?.error);
+      })
+      .finally(() => {
+        props.hideLoader();
+      });
+  };
+
+  const handleOnEditBtn = async (item) => {
     setClickedStaff(item);
-    setInputField({...inputField,...item});
-  }
+    setInputField({ ...inputField, ...item });
+  };
 
   return (
     <div className="add-staffs-box">
@@ -98,17 +129,19 @@ function ManageStaff(props) {
               }}
             />
           </div>
-          <div className="register-input-box">
-            <input
-              className="input-box-register"
-              type="text"
-              placeholder="password"
-              value={inputField.password}
-              onChange={(event) => {
-                handleOnChange(event, "password");
-              }}
-            />
-          </div>
+          { !clickedStaff && 
+            <div className="register-input-box">
+              <input
+                className="input-box-register"
+                type="text"
+                placeholder="password"
+                value={inputField.password}
+                onChange={(event) => {
+                  handleOnChange(event, "password");
+                }}
+              />
+            </div>
+          }
           <div className="register-input-box">
             <input
               className="input-box-register"
@@ -127,13 +160,18 @@ function ManageStaff(props) {
               placeholder="Mobile number"
               value={inputField.mobileNo}
               onChange={(event) => {
-                handleOnChange(event, "mobileNumber");
+                handleOnChange(event, "mobileNo");
               }}
             />
           </div>
         </div>
-        <button type="submit" className="form-btn reg-btn" onClick={handleAddStaff}>
-          Add Staff
+        <button
+          type="submit"
+          className="form-btn reg-btn"
+          onClick={handleAddStaff}
+        >
+          {!clickedStaff?"Add Staff" :"Update Details"}  
+          {/* If Clicked Staff object is not empty then display "Update Details" */}
         </button>
       </form>
 
@@ -144,7 +182,10 @@ function ManageStaff(props) {
             <div key={index} className="list-staff">
               <div>{item.name}</div>
               <div className="list-staff-btns">
-                <div style={{ cursor: "pointer" }} onClick={() =>handleOnEditBtn(item)}>
+                <div
+                  style={{ cursor: "pointer" }}
+                  onClick={() => handleOnEditBtn(item)}
+                >
                   <EditIcon />
                 </div>
                 <div style={{ cursor: "pointer" }}>
@@ -155,7 +196,7 @@ function ManageStaff(props) {
           );
         })}
       </div>
-      <ToastContainer/>
+      <ToastContainer />
     </div>
   );
 }
