@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./facility.css";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Link } from "react-router-dom";
@@ -6,13 +6,64 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Modal from "../../../components/Modal/Modal";
 import FacilityModal from "./FacilityModal/FacilityModal";
+import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
 
-const Facility = () => {
-
-    const [modal, setModal] = useState(false);
-    const onOffModal = () => {
-        setModal(prev => !prev);
+const Facility = (props) => {
+  const [modal, setModal] = useState(false);
+  const [data, setData] = useState([]);
+  const [clickedItem, setClickedItem] = useState(null); 
+  const onOffModal = () => {
+    if(modal){
+      setClickedItem(null); // Reset clicked item when closing modal
     }
+    setModal((prev) => !prev); //Switch the value of modal
+  };
+
+  const fetchData = async () => {
+    props.showLoader();
+    await axios
+      .get("http://localhost:4000/api/facility/get")
+      .then((response) => {
+        setData(response.data.facilities);
+      })
+      .catch((err) => {
+        toast.error(err?.response?.data?.error);
+      })
+      .finally(() => {
+        props.hideLoader();
+      });
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const handleEdit = (item) => {
+    setClickedItem(item);
+    setModal(true);
+  }
+
+  const filterOutData = (id) => {
+    const newArr = data.filter((item) => item._id !== id);
+    setData(newArr);
+  } 
+
+  const handleDelete = async (id) => {
+    await axios.delete(`http://localhost:4000/api/facility/delete/${id}`, { withCredentials: true })
+    .then((response)=> {
+      toast.success("Facility deleted successfully");
+      filterOutData(id);
+
+    })
+    .catch((err) => {
+      toast.error(err?.response?.data?.error);
+    })
+    .finally(() => {
+      props.hideLoader();
+    });
+  }
+
   return (
     <div className="admin-facility">
       <div className="go-back">
@@ -23,55 +74,43 @@ const Facility = () => {
 
       <div className="admin-facility-header">
         <div>Facilities</div>
-        <div className="add-facility-btn" onClick={onOffModal}>Add</div>
+        <div className="add-facility-btn" onClick={onOffModal}>
+          Add
+        </div>
       </div>
 
       <div className="admin-facility-rows">
-        <div className="admin-facility-row">
-          <div className="admin-facility-left">
-            <div className="admin-facility-title">Title</div>
-            <div>
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ea aut
-              natus recusandae alias esse accusamus voluptates. Ea veritatis
-              voluptates, provident amet consequatur adipisci eligendi dolores
-              placeat. Ducimus odio hic praesentium?
-            </div>
-            <div style={{ marginTop: "10px" }}>Added by Sabya</div>
-          </div>
+        {data.map((item, index) => {
+          return (
+            <div key={index} className="admin-facility-row">
+              <div className="admin-facility-left">
+                <div className="admin-facility-title">{item.title}</div>
+                <div>
+                  {item.description}
+                </div>
+                <div style={{ marginTop: "10px" }}><i>Added By</i><b> | {item?.addedBy?.name}</b></div>
+              </div>
 
-          <div className="admin-facility-btns">
-            <div>
-              <EditIcon />
+              <div className="admin-facility-btns">
+                <div onClick={()=>handleEdit(item)}>
+                  <EditIcon />
+                </div>
+                <div onClick={()=> handleDelete(item._id)}>
+                  <DeleteIcon />
+                </div>
+              </div>
             </div>
-            <div>
-              <DeleteIcon />
-            </div>
-          </div>
-        </div>
-        <div className="admin-facility-row">
-          <div className="admin-facility-left">
-            <div className="admin-facility-title">Title</div>
-            <div>
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ea aut
-              natus recusandae alias esse accusamus voluptates. Ea veritatis
-              voluptates, provident amet consequatur adipisci eligendi dolores
-              placeat. Ducimus odio hic praesentium?
-            </div>
-            <div style={{ marginTop: "10px" }}>Added by Sabya</div>
-          </div>
-
-          <div className="admin-facility-btns">
-            <div>
-              <EditIcon />
-            </div>
-            <div>
-              <DeleteIcon />
-            </div>
-          </div>
-        </div>
+          );
+        })}
       </div>
-      {modal && <Modal headers= "Add Facility" handleClose={onOffModal} children={<FacilityModal/>}/> }
-      
+      {modal && (
+        <Modal
+          headers="Add Facility"
+          handleClose={onOffModal}
+          children={<FacilityModal clickedItem={clickedItem} />}
+        />
+      )}
+      <ToastContainer />
     </div>
   );
 };
