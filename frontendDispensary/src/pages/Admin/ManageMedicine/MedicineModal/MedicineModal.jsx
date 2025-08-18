@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./medicineModal.css";
+import {toast, ToastContainer} from 'react-toastify';
+import axios from "axios";
 
-function MedicineModal() {
-  const [medicine, setMedicine] = useState({
+function MedicineModal(props) {
+  const [medicine, setMedicine] = useState({ // State to hold medicine details in input fields
     name: "",
     quantity: "",
     usage: "",
@@ -12,11 +14,56 @@ function MedicineModal() {
     setMedicine({ ...medicine, [key]: event.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const updateValue = async () => {
+    props.showLoader();
+    await axios.put(`http://localhost:4000/api/medicine/update/${props.clickedMedicine._id}`, medicine, {withCredentials: true})
+    .then((response)=>{
+      window.location.reload();
+      toast.success(response.data.message);
+    })
+    .catch(err=>
+      toast.error(err?.response?.data?.error)
+    )
+    .finally(()=>{
+      props.hideLoader();
+    });
+  }
+
+  const handleSubmit = async(e) => {
     e.preventDefault();
+
+    // Checking whether button is on "Add" or "Update"
+    if(props.clickedMedicine){ // Only executes if "Edit" icon is clicked
+      updateValue();
+      return;
+    } 
+
+    // Lines are executed when "Add" button is clicked
+    if(medicine.name.trim().length === 0 || !medicine.quantity || medicine.usage.trim().length === 0)
+      return toast.error("Please enter all the fields");
+
+    props.showLoader();
+    await axios.post('http://localhost:4000/api/medicine/add', medicine, {withCredentials: true})
+    .then((response) => {
+      window.location.reload();
+      toast.success(response.data.message);
+    })
+    .catch(err=>{
+      toast.error(err?.response?.data?.error);
+    })
+    .finally(()=>{
+      props.hideLoader();
+    })
   };
+
+  useEffect(() => { // For preselecting the medicine details in concern when Edit icon is clicked
+    if(props.clickedMedicine){
+      setMedicine({...medicine, name: props.clickedMedicine.name, quantity: props.clickedMedicine.quantity, usage: props.clickedMedicine.usage});
+    }
+  },[]);
+
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={(e) => handleSubmit(e)}>
       <div className="register-form-div">
         <div className="register-input-box">
           <input
@@ -47,8 +94,9 @@ function MedicineModal() {
         </div>
       </div>
       <button type="submit" className="form-btn reg-btn">
-        Add
+        {props.clickedMedicine ? "Update" : "Add"}
       </button>
+      <ToastContainer/>
     </form>
   );
 }

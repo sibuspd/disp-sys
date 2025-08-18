@@ -12,12 +12,17 @@ import { toast, ToastContainer } from "react-toastify";
 
 function ManageMedicine(props) {
   const [medicineSearch, setMedicineSearch] = useState("");
-  const [addModal, setAddModal] = useState(false);
+  const [addModal, setAddModal] = useState(false); // for toggling add Medicine modal ON and OFF
+  const [clickedMedicine, setClickedMedicine] = useState(null); // State to hold the selected medicines for edit or delete
 
+  
   const [data, setData] = useState([]); // For fetching medicines from backend
 
   const onOffModal = () => {
-    setAddModal((prev) => !prev);
+    if(addModal) // If medicine modal is open through "Add" button or "Edit" icon
+    console.log("clickedMedicine",clickedMedicine);
+      setClickedMedicine(null); // Erase clicked medicine
+    setAddModal((prev) => !prev); // Resets AddModal state to switch the Modal off during close button and On during Add button click
   };
 
   const onChangeValue = (value) => {
@@ -39,6 +44,31 @@ function ManageMedicine(props) {
       .finally(() => {
         props.hideLoader();
       });
+  };
+
+  const handleEdit = (item) => { // When "Edit" icon is clicked, AddModal is true
+    setClickedMedicine(item);
+    setAddModal(true);
+  }
+
+  const filterOutMedicine = (id) => {
+    let newArr = data.filter((item)=> item._id !== id);
+    setData(newArr);
+  }
+
+  const handleDelete = async (id) => {
+    props.showLoader();
+    await axios.delete(`http://localhost:4000/api/medicine/delete/${id}`, {withCredentials: true})
+    .then((response) => {
+      filterOutMedicine(id);
+      toast.success(response.data.message);
+    })
+    .catch(err => {
+      toast.error(err?.response?.data?.error)
+  })
+    .finally(() => {
+      props.hideLoader();
+    })  
   };
 
   useEffect(() => {
@@ -84,10 +114,10 @@ function ManageMedicine(props) {
                   <div className="col-2-mng">{item.name}</div>
                   <div className="col-2-mng">{item?.addedBy?.name}</div>
                   <div className="col-3-mng">{item.quantity}</div>
-                  <div className="edit-icon">
+                  <div className="edit-icon" onClick={()=>handleEdit(item)}>
                     <EditIcon />
                   </div>
-                  <div className="delete-icon">
+                  <div className="delete-icon" onClick={()=> handleDelete(item._id)}>
                     <DeleteIcon />
                   </div>
                 </div>
@@ -105,7 +135,7 @@ function ManageMedicine(props) {
         <Modal
           header="Manage Medicine"
           handleClose={onOffModal}
-          children={<MedicineModal />}
+          children={<MedicineModal showLoader={props.showLoader} hideLoader={props.hideLoader} clickedMedicine={clickedMedicine}/>}
         />
       )}
       <ToastContainer />
