@@ -1,21 +1,47 @@
-import React, {useState}  from "react";
+import React, { useState, useEffect } from "react";
 import "./adminGallery.css";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Link } from "react-router-dom";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import AddModal from "./AddModal/AddModal"
+import AddModal from "./AddModal/AddModal";
 import DeleteModal from "./DeleteModal/DeleteModal";
-const AdminGallery = () => {
-
+import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+const AdminGallery = (props) => {
   const [addModal, setAddModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
-  const setAddModalFunc = () => { 
-    setAddModal( prev => !prev);
-  }
-  const setDeleteModalFunc = () => { 
-    setDeleteModal( prev => !prev);
-  }
+  const [data, setData] = useState([]); // This state can be used to store gallery images if needed
+  const [clickedItem, setClickedItem] = useState(null); // State to hold the clicked image for deletion 
+  const setAddModalFunc = () => {
+    setAddModal((prev) => !prev);
+  };
+  const setDeleteModalFunc = (item=null) => {
+    if(deleteModal){
+      setClickedItem(null); // Reset clicked item when closing the delete modal
+    } else{
+      setClickedItem(item); // Set clicked item when opening the delete modal
+    } 
+    setDeleteModal((prev) => !prev);
+  };
+
+  const fetchData = async () => {
+    props.showLoader();
+    await axios
+      .get("http://localhost:4000/api/gallery/get")
+      .then((response) => {
+        setData(response.data.images);
+      })
+      .catch((err) => {
+        toast.error(err?.response?.data?.message);
+      })
+      .finally(() => {
+        props.hideLoader();
+      });
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []); // For populating gallery images
+
   return (
     <div className="gallery-admin">
       <div className="go-back">
@@ -24,51 +50,30 @@ const AdminGallery = () => {
         </Link>
       </div>
 
-      <div className="add-pic-gallery-btn" onClick={setAddModalFunc}>Add Image</div>
+      <div className="add-pic-gallery-btn" onClick={setAddModalFunc}>
+        Add Image
+      </div>
 
       <div className="gallery-home">
-              <div className="gallery-home-image-block img-admin" onClick={setDeleteModalFunc}>
-        <img
-          src="https://images.shiksha.com/mediadata/images/1533047671phpkiV8YS.jpeg"
-          alt=""
-          className="gallery-home-image"
-        />
+        {data.map((item, index) => {
+          return (
+            <div
+              key={index}
+              className="gallery-home-image-block img-admin"
+              onClick={()=>setDeleteModalFunc(item)}
+            >
+              <img
+                src={item.link}
+                alt=""
+                className="gallery-home-image"
+              />
+            </div>
+          );
+        })}{" "}
       </div>
-      <div className="gallery-home-image-block img-admin"onClick={setDeleteModalFunc}>
-        <img
-          src="https://ik.imagekit.io/syustaging/SYU_PREPROD/Gangadhar-Meher-University-_Sambalpur-_Orissa_PBiQ9BYKV.webp?tr=w-3840"
-          alt=""
-          className="gallery-home-image"
-        />
-      </div>
-      <div className="gallery-home-image-block img-admin" onClick={setDeleteModalFunc}>
-        <img
-          src="https://files.yappe.in/place/full/gangadhar-meher-university-10958974.webp"
-          alt=""
-          className="gallery-home-image"
-        />
-      </div>
-      <div className="gallery-home-image-block img-admin" onClick={setDeleteModalFunc}>
-        <img
-          src="https://admission.icnn.in/wp-content/uploads/2021/09/Gang-567x375.jpg"
-          alt=""
-          className="gallery-home-image"
-        />
-      </div>
-      <div className="gallery-home-image-block img-admin" onClick={setDeleteModalFunc}>
-        <img src="https://www.gmuniversity.ac.in/dept/gallery/gallery1720024136.jpg" alt="" className="gallery-home-image" />
-      </div>{" "}
-      <div className="gallery-home-image-block img-admin" onClick={setDeleteModalFunc}>
-        <img
-          src="https://files.yappe.in/place/full/gangadhar-meher-university-10958972.webp"
-          alt=""
-          className="gallery-home-image"
-        />
-      </div>
-      </div>
-      {addModal && <AddModal onClose={setAddModalFunc}/>}
-      {deleteModal && <DeleteModal onClose={setDeleteModalFunc}/>}
-      
+      {addModal && <AddModal onClose={setAddModalFunc} />}
+      {deleteModal && <DeleteModal onClose={setDeleteModalFunc} clickedItem={clickedItem} />}
+      <ToastContainer />
     </div>
   );
 };

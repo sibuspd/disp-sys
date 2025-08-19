@@ -3,6 +3,7 @@ import "./addModal.css";
 import axios from "axios";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
+import { toast, ToastContainer } from "react-toastify";
 
 const AddModal = (props) => {
   const [image, setImage] = useState(null); // State management of uploaded image
@@ -21,13 +22,23 @@ const AddModal = (props) => {
         data
       );
       const imageUrl = response.data.url; // Cloud url generated for uploaded image
-      setImage(imageUrl);
+      setImage(imageUrl); // Image state variable will hold the Image URL
     } catch (err) {
       console.log(err);
     } finally {
       setLoader(false);
     }
   };
+
+  const handleSubmit = async () => {
+    await axios.post('http://localhost:4000/api/gallery/add', {link:image},{withCredentials: true})
+    .then((response) => {
+      window.location.reload(); // Reload the page to see the new image
+    })
+    .catch((err) => {
+      toast.error(err?.response?.data?.message);
+    });
+  }
 
   return (
     <div className="addModal">
@@ -55,8 +66,10 @@ const AddModal = (props) => {
           </Box>
         )}
         {image && <img src={image} style={{width:"300px", height:"300px", marginTop:"20px"}}/>}
-        {image && <div className="cancel-modal-btn">Submit</div>}
+        {image && <div className="cancel-modal-btn" onClick={handleSubmit}>Submit</div>}
       </div>
+
+      <ToastContainer />
     </div>
   );
 };
