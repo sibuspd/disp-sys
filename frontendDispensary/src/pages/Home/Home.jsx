@@ -65,7 +65,7 @@ function Home(props) {
     <div className="home">
       <div className="home-block">
         <div className="home-left-page">
-          {userInfo && userInfo?.role !== "student" && (
+          {userInfo && userInfo?.role !== "student" && ( 
             <Link to={"/admin/dashboard"} className={`home-left-option`}>
               <HomeIcon /> Dashboard
             </Link>
