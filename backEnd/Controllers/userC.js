@@ -211,7 +211,7 @@ exports.getStudentByRollNo = async (req, res) => {
     if(student){
       return res.status(200).json({ message: "Student data fetched successfully", user: student }); // If student with given roll number exists, return their details
     }
-    return res.status(404).json({ error: "Invalid Roll Number" });
+    return res.status(404).json({ error: "No student exists with this Roll Number" });
   }
   catch(error){
     res.status(500).json({
@@ -236,7 +236,7 @@ exports.registerStudentByStaff = async (req, res) => {
     }
     //Password generation
     token = token.toString(); // Converting OTP to string for password
-    const updatedPass = await bcrypt.hash(token, 10); // Hashing the generated password with 10 rounds
+    const updatedPass = await bcryptjs.hash(token, 10); // Hashing the generated password with 10 rounds
 
     const user = new UserModels({...body, password: updatedPass }); // Creating a new user instance with hashed password
     await user.save(); // Saving the user to the database
@@ -244,7 +244,7 @@ exports.registerStudentByStaff = async (req, res) => {
     // Sending the plain text password (token) to intended user via email
       const mailOptions = {
         from: process.env.EMAIL, // Sender's email address
-        to: email, // Client's email address for password reset
+        to: body.email, // Client's email address for password reset
         subject: 'Password for New Account on College Dispensary System',
         text: `Your password for College Dispensary System is ${token} and is registered with your email ${body.email}. Please change it after logging in.`
       }
