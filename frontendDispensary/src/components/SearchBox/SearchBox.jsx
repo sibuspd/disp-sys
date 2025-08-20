@@ -12,11 +12,16 @@ function SearchBox(props) {
       props.onChange(event.target.value); // Refers to the parent function handleInputChange
   }
 
+  const handleClick = () => { // Will work when user clicks on search icon
+    if(props.handleClick) // Checks if handleClick prop is passed
+      props.handleClick(); // It calls the handleSearch function in parent component RegisterStudent.jsx
+  }
+
   return (
     <div className="page-searchBox">
         <input type="text" className="input-box" placeholder={placeholder} value={value}
         onChange={(e)=> handleOnChange(e)}/>
-        <div className="search-btn"><SearchIcon/></div>
+        <div className="search-btn" onClick={handleClick}><SearchIcon/></div>
     </div>        
   )
 }
