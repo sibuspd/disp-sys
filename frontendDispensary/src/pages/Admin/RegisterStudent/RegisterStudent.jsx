@@ -263,7 +263,7 @@ function RegisterStudent(props) {
         <Modal  
           header="Report a Student"
           handleClose={openCloseModal}
-          children={<Report />}
+          children={<Report studentDetail={studentDetail} handleCloseModal={openCloseModal} />}
         />
       )}
       <ToastContainer />
