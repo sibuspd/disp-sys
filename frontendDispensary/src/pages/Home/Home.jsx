@@ -70,14 +70,14 @@ function Home(props) {
               <HomeIcon /> Dashboard
             </Link>
           )}
-          {/* {userInfo && userInfo?.role === "student" && (
+          {userInfo && userInfo?.role === "student" && (
             <Link
               to={`/student/${userInfo?._id}`}
               className={`home-left-option`}
             >
               <HomeIcon /> Profile
             </Link>
-          )} */}
+          )}
 
           <div
             className={`home-left-option ${
