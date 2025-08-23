@@ -8,7 +8,7 @@ router.post('/add', Authentication.adminFacultyAuth, HistoryController.addHistor
 
 // GET API Calls
 router.get('/get-history', Authentication.adminFacultyAuth, HistoryController.getHistoryByDate); // Route to get history by date
-router.get('/get', Authentication.adminFacultyAuth, HistoryController.getStudentHistory); // Route to get a particular student's history
+router.get('/get', Authentication.studentAuth, HistoryController.getStudentHistory); // Route to get a particular student's history
 
 
 module.exports = router;
