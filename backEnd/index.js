@@ -9,7 +9,7 @@ app.use(express.json()); // Middleware to parse JSON requests from request body
 app.use(cookieParser()); // Middleware to parse cookies from request headers
 app.use(cors({
     credentials: true, // Enabling credentials so that cookies can be shared without need to manually send them in headers
-    origin: 'https://disp-erao83n3d-sibuspds-projects.vercel.app' // Allowing requests from this origin
+    origin: true // Allowing requests from all origin
 })); // Middleware to enable cross-origin resource sharing 
 
 // Establishing MongoDB connection-----------------------------------------------------------
