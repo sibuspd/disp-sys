@@ -49,7 +49,7 @@ function RegisterStudent(props) {
     props.showLoader();
     await axios
       .get(
-        `http://localhost:4000/api/auth/get-student-by-roll/${searchStudent}`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/auth/get-student-by-roll/${searchStudent}`,
         { withCredentials: true }
       )
       .then((response) => {
@@ -86,7 +86,7 @@ function RegisterStudent(props) {
 
     props.showLoader();
     const {_id, updatedAt, ...student} = {...studentDetail}; // Exclude _id and updatedAt from the student object
-    await axios.put(`http://localhost:4000/api/auth/update-student/${_id}`, student, {withCredentials: true})
+    await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/auth/update-student/${_id}`, student, {withCredentials: true})
     .then((response)=>{
       console.log(response.data);
       toast.success(response.data.message);
@@ -104,7 +104,7 @@ function RegisterStudent(props) {
       return toast.error("Name, Roll No., Email and Mobile No. are required fields");
     }
     props.showLoader();
-    await axios.post("http://localhost:4000/api/auth/registerStudentByStaff", studentDetail, {withCredentials: true})
+    await axios.post("${import.meta.env.VITE_BACKEND_URL}/api/auth/registerStudentByStaff", studentDetail, {withCredentials: true})
     .then((response)=>{
       toast.success(response.data.message);
     })

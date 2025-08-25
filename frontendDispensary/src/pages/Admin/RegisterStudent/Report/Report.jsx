@@ -18,7 +18,7 @@ function Report(props) {
   const fetchData = async () => {
     await axios
       .get(
-        `http://localhost:4000/api/medicine/search-by-name?name=${searchMedicineName}`
+        `${import.meta.env.VITE_BACKEND_URL}/api/medicine/search-by-name?name=${searchMedicineName}`
       )
       .then((response) => {
         setData(response.data.medicines); // Fetches medicine(s) from the Medicines collection based on the search input
@@ -76,7 +76,7 @@ function Report(props) {
     if(selectedMedicines.length === 0) return toast.error("No medicine was selected");
     if(checkInputValid()) return toast.error("Please mention required quantity for all medicines");
     
-    await axios.post('http://localhost:4000/api/history/add',{roll:props.studentDetail.roll, student:props.studentDetail._id, medicines:selectedMedicines},{withCredentials: true, })
+    await axios.post('${import.meta.env.VITE_BACKEND_URL}/api/history/add',{roll:props.studentDetail.roll, student:props.studentDetail._id, medicines:selectedMedicines},{withCredentials: true, })
     .then((response)=>{
       toast.success(response.data.message);
 

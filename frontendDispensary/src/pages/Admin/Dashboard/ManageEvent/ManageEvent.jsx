@@ -12,7 +12,7 @@ function ManageEvent(props) {
   const fetchData = async () => {
     props.showLoader();
     await axios
-      .get("http://localhost:4000/api/notification/get")
+      .get("${import.meta.env.VITE_BACKEND_URL}/api/notification/get")
       .then((response) => {
         setData(response.data.notifications);
       })
@@ -32,7 +32,7 @@ function ManageEvent(props) {
     e.preventDefault();
     if(title.trim().length === 0) return toast.error("Please enter a title");
     props.showLoader();
-    await axios.post('http://localhost:4000/api/notification/add', {title}, {withCredentials: true})
+    await axios.post('${import.meta.env.VITE_BACKEND_URL}/api/notification/add', {title}, {withCredentials: true})
     .then((response) => {
       setData([response.data.notification, ...data]);
       toast.success(response.data.message);
@@ -53,7 +53,7 @@ function ManageEvent(props) {
 
   const handleDeleteEvent = async(id) =>{
     props.showLoader();
-    await axios.delete(`http://localhost:4000/api/notification/delete/${id}`, {withCredentials: true})
+    await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/notification/delete/${id}`, {withCredentials: true})
     .then((response) => {
       toast.success(response.data.message);
       filterOutEvent(id);

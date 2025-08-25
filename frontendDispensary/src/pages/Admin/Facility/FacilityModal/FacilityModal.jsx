@@ -17,7 +17,7 @@ const FacilityModal = (props) => {
   },[]);
 
   const updateFacility = async() => {
-    await axios.put(`http://localhost:4000/api/facility/update/${props.clickedItem._id}`, inputField, {withCredentials: true})
+    await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/facility/update/${props.clickedItem._id}`, inputField, {withCredentials: true})
     .then((response) => {
       window.location.reload();
     })
@@ -40,7 +40,7 @@ const FacilityModal = (props) => {
         }
 
          // When 'Add' icon is clicked
-        await axios.post('http://localhost:4000/api/facility/add', inputField, {withCredentials: true})
+        await axios.post('${import.meta.env.VITE_BACKEND_URL}/api/facility/add', inputField, {withCredentials: true})
         .then((response)=> {
           window.location.reload();
         })

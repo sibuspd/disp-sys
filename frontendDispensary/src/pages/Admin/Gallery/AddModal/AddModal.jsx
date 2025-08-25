@@ -31,7 +31,7 @@ const AddModal = (props) => {
   };
 
   const handleSubmit = async () => {
-    await axios.post('http://localhost:4000/api/gallery/add', {link:image},{withCredentials: true})
+    await axios.post('${import.meta.env.VITE_BACKEND_URL}/api/gallery/add', {link:image},{withCredentials: true})
     .then((response) => {
       window.location.reload(); // Reload the page to see the new image
     })

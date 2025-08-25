@@ -33,7 +33,7 @@ function ManageMedicine(props) {
     props.showLoader();
     await axios
       .get(
-        `http://localhost:4000/api/medicine/search-by-name?name=${medicineSearch}`
+        `${import.meta.env.VITE_BACKEND_URL}/api/medicine/search-by-name?name=${medicineSearch}`
       )
       .then((response) => {
         setData(response.data.medicines);
@@ -58,7 +58,7 @@ function ManageMedicine(props) {
 
   const handleDelete = async (id) => {
     props.showLoader();
-    await axios.delete(`http://localhost:4000/api/medicine/delete/${id}`, {withCredentials: true})
+    await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/medicine/delete/${id}`, {withCredentials: true})
     .then((response) => {
       filterOutMedicine(id);
       toast.success(response.data.message);

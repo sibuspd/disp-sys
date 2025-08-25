@@ -23,7 +23,7 @@ const Facility = (props) => {
   const fetchData = async () => {
     props.showLoader();
     await axios
-      .get("http://localhost:4000/api/facility/get")
+      .get("${import.meta.env.VITE_BACKEND_URL}/api/facility/get")
       .then((response) => {
         setData(response.data.facilities);
       })
@@ -50,7 +50,7 @@ const Facility = (props) => {
   } 
 
   const handleDelete = async (id) => {
-    await axios.delete(`http://localhost:4000/api/facility/delete/${id}`, { withCredentials: true })
+    await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/facility/delete/${id}`, { withCredentials: true })
     .then((response)=> {
       toast.success("Facility deleted successfully");
       filterOutData(id);

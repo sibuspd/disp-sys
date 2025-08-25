@@ -34,7 +34,7 @@ function Login(props) {
 
     props.showLoader();
 
-    await axios.post('http://localhost:4000/api/auth/login', loginField, {withCredentials: true})
+    await axios.post('${import.meta.env.VITE_BACKEND_URL}/api/auth/login', loginField, {withCredentials: true})
     .then( (response) => {
       console.log(response);
 
@@ -69,7 +69,7 @@ function Login(props) {
     
     props.showLoader();
 
-    await axios.post('http://localhost:4000/api/auth/register',registerField)
+    await axios.post('${import.meta.env.VITE_BACKEND_URL}/api/auth/register',registerField)
     .then(response => {
       console.log(response);
       toast.success("User registered successfully");

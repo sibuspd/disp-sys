@@ -26,7 +26,7 @@ function ManageStaff(props) {
     props.showLoader(); // Initially set Loading to true when the data is being fetched
 
     await axios
-      .get("http://localhost:4000/api/auth/get-staff") // axios.get() returns a promise
+      .get("${import.meta.env.VITE_BACKEND_URL}/api/auth/get-staff") // axios.get() returns a promise
       .then((response) => {
         setStaffs(response.data.staffs);
         console.log(response.data.staffs);  
@@ -44,7 +44,7 @@ function ManageStaff(props) {
   }, []);
 
   const handleUpdate = async() =>{
-    await axios.put(`http://localhost:4000/api/auth/update-staff/${clickedStaff?._id}`, inputField, {withCredentials: true} )
+    await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/auth/update-staff/${clickedStaff?._id}`, inputField, {withCredentials: true} )
     .then((response)=>{
       window.location.reload(); // Reload the page once the staff is updated
     })
@@ -75,7 +75,7 @@ function ManageStaff(props) {
     }
     props.showLoader();
     await axios
-      .post("http://localhost:4000/api/auth/add-staff", inputField, {
+      .post("${import.meta.env.VITE_BACKEND_URL}/api/auth/add-staff", inputField, {
         withCredentials: true,
       })
       .then((response) => {
@@ -109,7 +109,7 @@ function ManageStaff(props) {
 
   const handleDelete = async(id) =>{
     alert("Are you sure about deleting this entry?");
-    await axios.delete(`http://localhost:4000/api/auth/delete-staff/${id}`, {withCredentials: true})
+    await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/auth/delete-staff/${id}`, {withCredentials: true})
     .then((response)=>{
        filterOutData(id);
        toast.success(response.data.message);

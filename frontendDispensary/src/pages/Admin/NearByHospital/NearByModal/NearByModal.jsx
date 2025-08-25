@@ -12,7 +12,7 @@ const NearByModal = (props) => {
   }
 
   const updateFunc = async () => {
-    await axios.put(`http://localhost:4000/api/hospital/update/${props.clickedItem._id}`, inputField, {withCredentials: true})
+    await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/hospital/update/${props.clickedItem._id}`, inputField, {withCredentials: true})
     .then((response)=> {
       window.location.reload();
     })
@@ -34,7 +34,7 @@ const NearByModal = (props) => {
     }
 
     // Add new hospital
-    await axios.post('http://localhost:4000/api/hospital/add', inputField, {withCredentials: true})
+    await axios.post('${import.meta.env.VITE_BACKEND_URL}/api/hospital/add', inputField, {withCredentials: true})
     .then((response) => {
       window.location.reload();
     })

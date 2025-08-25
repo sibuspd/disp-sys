@@ -16,7 +16,7 @@ function MedicineModal(props) {
 
   const updateValue = async () => {
     props.showLoader();
-    await axios.put(`http://localhost:4000/api/medicine/update/${props.clickedMedicine._id}`, medicine, {withCredentials: true})
+    await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/medicine/update/${props.clickedMedicine._id}`, medicine, {withCredentials: true})
     .then((response)=>{
       window.location.reload();
       toast.success(response.data.message);
@@ -43,7 +43,7 @@ function MedicineModal(props) {
       return toast.error("Please enter all the fields");
 
     props.showLoader();
-    await axios.post('http://localhost:4000/api/medicine/add', medicine, {withCredentials: true})
+    await axios.post('${import.meta.env.VITE_BACKEND_URL}/api/medicine/add', medicine, {withCredentials: true})
     .then((response) => {
       window.location.reload();
       toast.success(response.data.message);

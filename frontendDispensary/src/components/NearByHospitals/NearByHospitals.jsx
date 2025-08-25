@@ -21,7 +21,7 @@ function NearByHospitals(props) {
 
       props.showLoader();
 
-      await axios.get('http://localhost:4000/api/hospital/get')
+      await axios.get('${import.meta.env.VITE_BACKEND_URL}/api/hospital/get')
       .then( (response) => {
         getFormattedData(response.data.hospitals);
       })

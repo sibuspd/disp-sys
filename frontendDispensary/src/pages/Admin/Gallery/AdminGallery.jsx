@@ -26,7 +26,7 @@ const AdminGallery = (props) => {
   const fetchData = async () => {
     props.showLoader();
     await axios
-      .get("http://localhost:4000/api/gallery/get")
+      .get("${import.meta.env.VITE_BACKEND_URL}/api/gallery/get")
       .then((response) => {
         setData(response.data.images);
       })

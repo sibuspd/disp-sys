@@ -31,7 +31,7 @@ function Stock(props) {
 
   const fetchData = async () => {
     props.showLoader();
-    await axios.get(`http://localhost:4000/api/medicine/search-by-name?name=${medicineName}`)
+    await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/medicine/search-by-name?name=${medicineName}`)
     .then((response)=>{
       //Validation
       if(response.data.medicines.length === 0){

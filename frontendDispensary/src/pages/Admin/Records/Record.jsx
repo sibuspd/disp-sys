@@ -47,7 +47,7 @@ function Record(props) {
     props.showLoader();
     await axios
       .get(
-        `http://localhost:4000/api/history/get-history?month=${selectedMonth}&year=${selectedYear}`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/history/get-history?month=${selectedMonth}&year=${selectedYear}`,
         { withCredentials: true }
       )
       .then((response) => {
@@ -111,7 +111,7 @@ function Record(props) {
       return toast.error("Please enter a Roll No.");
     props.showLoader();
     await axios
-      .get(`http://localhost:4000/api/history/get?roll=${studentRoll}`, {
+      .get(`${import.meta.env.VITE_BACKEND_URL}/api/history/get?roll=${studentRoll}`, {
         withCredentials: true,
       })
       .then((response) => {
