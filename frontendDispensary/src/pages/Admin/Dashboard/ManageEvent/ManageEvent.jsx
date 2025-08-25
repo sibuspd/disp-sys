@@ -12,7 +12,7 @@ function ManageEvent(props) {
   const fetchData = async () => {
     props.showLoader();
     await axios
-      .get("${import.meta.env.VITE_BACKEND_URL}/api/notification/get")
+      .get(`${import.meta.env.VITE_BACKEND_URL}/api/notification/get`)
       .then((response) => {
         setData(response.data.notifications);
       })
@@ -32,7 +32,7 @@ function ManageEvent(props) {
     e.preventDefault();
     if(title.trim().length === 0) return toast.error("Please enter a title");
     props.showLoader();
-    await axios.post('${import.meta.env.VITE_BACKEND_URL}/api/notification/add', {title}, {withCredentials: true})
+    await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/notification/add`, {title}, {withCredentials: true})
     .then((response) => {
       setData([response.data.notification, ...data]);
       toast.success(response.data.message);

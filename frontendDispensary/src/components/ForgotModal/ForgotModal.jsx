@@ -18,7 +18,7 @@ const ForgotModal = (props) => {
         if(inputField.email.trim().length === 0) return toast.error("Please enter email address");
         // Send OTP to email
         props.showLoader();
-        await axios.post('${import.meta.env.VITE_BACKEND_URL}/api/auth/send-otp', {email: inputField.email})
+        await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/send-otp`, {email: inputField.email})
         .then((response)=>{
             console.log(response);
             setStep(2);
@@ -39,7 +39,7 @@ const ForgotModal = (props) => {
         if(inputField.otp.trim().length === 0) return toast.error('Please enter OTP');
         // Verify the OTP 
         props.showLoader();
-        await axios.post('${import.meta.env.VITE_BACKEND_URL}/api/auth/verify-otp',{email: inputField.email, otp: inputField.otp}) //Sending email and otp from frontend input fields to backend
+        await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/verify-otp`,{email: inputField.email, otp: inputField.otp}) //Sending email and otp from frontend input fields to backend
         .then((response)=>{
             setStep(3);
             setButtonText('Update Password');
@@ -58,7 +58,7 @@ const ForgotModal = (props) => {
         if(inputField.newPassword.trim().length === 0) return toast.error("Please enter a valid new password");
         // Update the password
         props.showLoader();
-        await axios.post('${import.meta.env.VITE_BACKEND_URL}/api/auth/reset-password', {email: inputField.email, newPassword: inputField.newPassword})
+        await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/reset-password`, {email: inputField.email, newPassword: inputField.newPassword})
         .then((response) => {
             alert(response.data.message);
             // Closing the ForgotModal

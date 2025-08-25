@@ -9,7 +9,7 @@ function Facility(props) {
     props.showLoader();
 
     await axios
-      .get("${import.meta.env.VITE_BACKEND_URL}/api/facility/get")
+      .get(`${import.meta.env.VITE_BACKEND_URL}/api/facility/get`)
       .then((response) => {
         setData(response.data.facilities);
       })

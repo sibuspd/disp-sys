@@ -43,7 +43,7 @@ function MedicineModal(props) {
       return toast.error("Please enter all the fields");
 
     props.showLoader();
-    await axios.post('${import.meta.env.VITE_BACKEND_URL}/api/medicine/add', medicine, {withCredentials: true})
+    await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/medicine/add`, medicine, {withCredentials: true})
     .then((response) => {
       window.location.reload();
       toast.success(response.data.message);

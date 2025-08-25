@@ -19,7 +19,7 @@ function Header(props) {
   const handleLogout = async() => {
     props.showLoader();
 
-    await axios.post('${import.meta.env.VITE_BACKEND_URL}/api/auth/logout',{},{withCredentials: true})
+    await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/logout`,{},{withCredentials: true})
     .then((response) => {
       console.log(response);
       props.handleLogin(false);
@@ -53,7 +53,7 @@ function Header(props) {
   };
 
   const fetchEvents = async()=> {
-    await axios.get('${import.meta.env.VITE_BACKEND_URL}/api/notification/get')
+    await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/notification/get`)
     .then(response=>setEvents(response.data.notifications))
     .catch(err => console.log(err));
   }

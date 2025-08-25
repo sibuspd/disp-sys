@@ -24,7 +24,7 @@ const NearByHospital = (props) => {
   const fetchData = async () => {
     props.showLoader();
     await axios
-      .get("${import.meta.env.VITE_BACKEND_URL}/api/hospital/get")
+      .get(`${import.meta.env.VITE_BACKEND_URL}/api/hospital/get`)
       .then((response) => {
         setData(response.data.hospitals);
       })

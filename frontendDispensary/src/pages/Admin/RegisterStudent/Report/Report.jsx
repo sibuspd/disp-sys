@@ -76,7 +76,7 @@ function Report(props) {
     if(selectedMedicines.length === 0) return toast.error("No medicine was selected");
     if(checkInputValid()) return toast.error("Please mention required quantity for all medicines");
     
-    await axios.post('${import.meta.env.VITE_BACKEND_URL}/api/history/add',{roll:props.studentDetail.roll, student:props.studentDetail._id, medicines:selectedMedicines},{withCredentials: true, })
+    await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/history/add`,{roll:props.studentDetail.roll, student:props.studentDetail._id, medicines:selectedMedicines},{withCredentials: true, })
     .then((response)=>{
       toast.success(response.data.message);
 

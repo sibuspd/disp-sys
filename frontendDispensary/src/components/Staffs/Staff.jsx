@@ -22,7 +22,7 @@ function Staff(props) {
 
     props.showLoader(); // Initially set Loading to true when the data is being fetched
     
-    await axios.get('${import.meta.env.VITE_BACKEND_URL}/api/auth/get-staff') // axios.get() returns a promise
+    await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/auth/get-staff`) // axios.get() returns a promise
     .then((response) => { 
       getFormattedData(response.data.staffs); // Takes an array of objects as an argument
     })

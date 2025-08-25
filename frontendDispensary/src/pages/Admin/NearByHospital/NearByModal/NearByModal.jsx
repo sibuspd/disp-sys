@@ -34,7 +34,7 @@ const NearByModal = (props) => {
     }
 
     // Add new hospital
-    await axios.post('${import.meta.env.VITE_BACKEND_URL}/api/hospital/add', inputField, {withCredentials: true})
+    await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/hospital/add`, inputField, {withCredentials: true})
     .then((response) => {
       window.location.reload();
     })

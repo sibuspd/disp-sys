@@ -26,7 +26,7 @@ function ManageStaff(props) {
     props.showLoader(); // Initially set Loading to true when the data is being fetched
 
     await axios
-      .get("${import.meta.env.VITE_BACKEND_URL}/api/auth/get-staff") // axios.get() returns a promise
+      .get(`${import.meta.env.VITE_BACKEND_URL}/api/auth/get-staff`) // axios.get() returns a promise
       .then((response) => {
         setStaffs(response.data.staffs);
         console.log(response.data.staffs);  
@@ -75,7 +75,7 @@ function ManageStaff(props) {
     }
     props.showLoader();
     await axios
-      .post("${import.meta.env.VITE_BACKEND_URL}/api/auth/add-staff", inputField, {
+      .post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/add-staff`, inputField, {
         withCredentials: true,
       })
       .then((response) => {

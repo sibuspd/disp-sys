@@ -40,7 +40,7 @@ const FacilityModal = (props) => {
         }
 
          // When 'Add' icon is clicked
-        await axios.post('${import.meta.env.VITE_BACKEND_URL}/api/facility/add', inputField, {withCredentials: true})
+        await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/facility/add`, inputField, {withCredentials: true})
         .then((response)=> {
           window.location.reload();
         })
