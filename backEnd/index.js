@@ -38,7 +38,7 @@ const historyRoutes = require('./Routes/historyR'); // Importing history routes
 app.use('/api/history', historyRoutes); // Mounting history routes under /api/history
 
 // Starting the server----------------------------------------------------------------------
-app.listen(process.env.PORT, () => {
+app.listen(process.env.PORT || 4000, () => {
     console.log('Server is listening on port- ', process.env.PORT);
 });
 
