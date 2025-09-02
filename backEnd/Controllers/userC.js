@@ -11,9 +11,9 @@ const { info } = require("console");
 
 // Cookie Configuration
 const cookieConfig = {
-  httpOnly: true, // Cookie is not accessible via JavaScript
+  httpOnly: false, // Vercel and Render serve the app with HTTPS protocol
   secure: false, // Set to true if using HTTPS - In production mode
-  sameSite: 'Lax' // Cookie is sent only for same-site requests
+  sameSite: 'none' // Allows cross-origin cookies transfer between Vercel <-> Render
 }
 
 // Nodemailer transporter configuration for Sender's Server
